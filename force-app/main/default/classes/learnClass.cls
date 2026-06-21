@@ -1681,5 +1681,10 @@ public with sharing class learnClass {
 // refresh1(){
 //     refreshApex(this.dashboardResult);
 // }
+
+
+
+//git remote add newOrigin https://github.com/Anjali01-23/dapData.git  
+// git push -u  newOrigin main
 }
 }
