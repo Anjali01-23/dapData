@@ -1686,5 +1686,116 @@ public with sharing class learnClass {
 
 //git remote add newOrigin https://github.com/Anjali01-23/dapData.git  
 // git push -u  newOrigin main
+
+
+
+
+
+
+
+
+// first i will create code in dev console then i will create a project in vs code where i will create the lwc part then i will authorize the org in vs code and get the dev console classes and deploy the lwc code and then i will create codevault project and then i will run these commands in vs code terminal
+
+
+// [19:02, 20/06/2026] anjaligoyal4102: git checkout -b branch1  :- to create a new branch
+// [19:03, 20/06/2026] anjaligoyal4102: git add .   , git commit -m 'New'
+// [19:03, 20/06/2026] anjaligoyal4102: git push -u origin branch1    :- to push  the code in this branch , if this branch is not in remote then it will bet created
+// [19:06, 20/06/2026] anjaligoyal4102: git config --global user.name "Your Name": Sets your commit identity name globally.git config --global user.email "email@example.com": Links your email to your commits.git init: Initializes a brand new local repository in your current directory.git clone <url>: Copies an existing remote repository onto your local machine.The Daily Workflow (Stage & Commit)git status: Displays the state of working directory files (tracked, untracked, modified).git add <file>: Stages a specific file's changes for the next commit snapshot.git add .: Stages all modified and new files in the entire project folder.git commit -m "message": Permanently saves your staged snapshot into local version history.git commit --amend: Modifies your very last commit message or adds forgotten s…
+// [19:08, 20/06/2026] anjaligoyal4102: # Set your identity
+// git config --global user.name "Your Name"
+// git config --global user.email "your.email@example.com"
+
+// # Start a brand new local repository
+// git init
+
+// # Clone an existing repository from the cloud
+// git clone <repository_url>
+// [19:08, 20/06/2026] anjaligoyal4102: # Check what files have changed
+// git status
+
+// # Stage a specific file for the next commit
+// git add <file_name>
+
+// # Stage all modified and new files at once
+// git add .
+
+// # Save your staged changes with a description
+// git commit -m "Your descriptive commit message"
+
+// # Add missed changes or fix typos in your last commit
+// git commit --amend -m "Updated commit message"
+// [19:08, 20/06/2026] anjaligoyal4102: # List all your local branches
+// git branch
+
+// # Create a new branch and switch to it immediately
+// git checkout -b <branch_name>
+
+// # Switch back to an existing branch
+// git checkout <branch_name>
+
+// # Merge another branch's changes into your current active branch
+// git merge <branch_name>
+
+// # Delete a local branch safely after merging it
+// git branch -d <branch_name>
+// [19:08, 20/06/2026] anjaligoyal4102: # Link your local project to a remote server for the first time
+// git remote add origin <repository_url>
+
+// # Upload your local branch commits to the server
+// git push origin <branch_name>
+
+// # Download remote updates and automatically merge them into your project
+// git pull origin <branch_name>
+
+// # Fetch server updates to see what changed without altering your local files
+// git fetch
+// [19:09, 20/06/2026] anjaligoyal4102: # Show full commit history with author and dates
+// git log
+
+// # Show a compressed, clean view of your history
+// git log --oneline
+
+// # View modifications made in your working folder but not yet staged
+// git diff
+
+// # View changes that are staged and ready to be committed
+// git diff --staged
+
+// # See who changed what line inside a specific file
+// git blame <file_name>
+// [19:09, 20/06/2026] anjaligoyal4102: # Save your messy, uncommitted work temporarily to a clean slate
+// git stash
+
+// # Retrieve your stashed work back into your project
+// git stash pop
+
+// # Undo all uncommitted modifications in a specific file
+// git checkout -- <file_name>
+
+// # Safely reverse an old commit by making a new commit that undoes its changes
+// git revert <commit_hash>
+
+// # Completely wipe out your last commit and delete its code changes (use with care!)
+// git reset --hard HEAD~1
+// [19:17, 20/06/2026] anjaligoyal4102: sf org login web --alias my-production-org --set-default
+// [19:19, 20/06/2026] anjaligoyal4102: sf org login web: Authorize an org
+
+// sf org open: Open your org in a browser
+
+// sf org create scratch: Create a scratch org
+
+// sf project deploy start: Deploy metadata to your org
+
+// sf project retrieve start: Retrieve metadata from your org
+
+// sf template generate <artifact>: Scaffold new components, such as Apex classes and triggers, LWC components, Lightning apps, and more
+
+// sf apex <command>: Run Apex tests, run anonymous Apex blocks, and view logs
+
+// sf data <command>: Work with test data
+
+// sf alias <command>: Manage org aliases
+
+// sf config <command>: Configure CLI settings
 }
 }
