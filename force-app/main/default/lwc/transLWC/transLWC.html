@@ -1,0 +1,109 @@
+<template>
+    <div class="c2">
+  <h1 class="slds-text-heading_large slds-m-around_left">{names}</h1>
+    </div>
+  <br>
+  <div class="c2">
+  <div class="c1">
+    <h1 class="slds-text-heading_medium slds-text-title_bold slds-m-top_medium slds-m-left_medium">Total Balance</h1>
+    <p class="slds-text-heading_small  slds-m-left_medium">{amt}</p>
+
+    <h1 class="slds-text-heading_medium slds-text-title_bold slds-m-top_medium slds-m-left_medium">Income</h1>
+    <p class="slds-text-heading_small  slds-m-left_medium">{income}</p>
+
+    <h1 class="slds-text-heading_medium slds-text-title_bold slds-m-top_medium slds-m-left_medium">Expense</h1>
+    <p class="slds-text-heading_small  slds-m-left_medium">{expense}</p>
+<br>
+  </div>
+  </div>
+ <br>
+  
+  
+    <h1 class=" slds-text-heading_medium slds-m-bottom_medium">
+        Transactions
+    </h1>
+    <template for:each={datas} for:item="trans">
+        <div key={trans.Id} class="slds-grid slds-m-bottom_medium slds-grid_align-spread" onmouseenter={del} onmouseout={notDel} onmousemove={del}>
+            <div>
+                <p class="slds-text-title_bold">
+                    {trans.Name}
+                </p>
+
+                <p>
+                    {trans.Date__c}
+                </p>
+
+            </div>
+
+            <div>
+                <p class="slds-text-heading_small slds-text-title_bold">
+                    ₹ {trans.Amount__c}
+                </p>
+            </div>
+            <template lwc:if={allowDelete}>
+            <lightning-button  label="Delete" onclick={deleteRec} data-id={trans.Id}></lightning-button>
+            </template>
+        </div>
+
+    </template>
+
+
+
+  <br>
+  <div class="c2">
+   
+  <h1 class="slds-text-heading_medium">Add Transactions</h1>
+ <br>
+        <lightning-button-group>
+            <lightning-button label="Expense" onclick={set} data-types="Expense"></lightning-button>
+            <lightning-button label="Income" onclick={set} data-types="Income"></lightning-button>
+        </lightning-button-group>
+   </div>
+
+   <div class="slds-grid slds-wrap">
+   <div class="slds-col slds-size_12-of-12 slds-p-around_medium">
+        <!-- <p class="slds-align_absolute-center">Filters</p> -->
+   <lightning-input type="text" label="Name" onchange={handleName} value={naam}>
+   </lightning-input>
+    </div>
+
+    <div class="slds-col slds-size_6-of-12 slds-p-around_medium">
+        <!-- <p class="slds-align_absolute-center">Filters</p> -->
+   <lightning-input type="text" label="Amount" onchange={handleAmt} class="amtCmp" value={amounts}>
+   </lightning-input>
+    </div>
+
+    <div class="slds-col slds-size_6-of-12 slds-p-around_medium">
+        <!-- <p class="slds-align_absolute-center">Filters</p> -->
+   <lightning-input type="date" label="Date" onchange={handleDate} class="dateCmp" value={dates}>
+   </lightning-input>
+    </div>
+   </div>
+
+   <div class="c2">
+    <lightning-button type="submit" label="Submit" onclick={handleValidation}></lightning-button>
+   </div>
+</template>
+
+
+
+<!-- How refreshApex works
+refreshApex is a Salesforce LWC helper that refreshes wired Apex data.
+In your component, @wire(getData) and others store the response object in this.wholedata, this.a1, etc.
+Calling refreshApex(this.wholedata) tells LWC to re-run that wire request and fetch fresh data from the server.
+This updates the component’s UI with the latest values after you insert or delete records.
+
+How Promise.all works
+Promise.all([...]) waits for multiple asynchronous operations to finish.
+You create an array of promises, here refreshPromises.
+Each refreshApex(...) call returns a promise, so you push it into the array.
+await Promise.all(refreshPromises) waits until all refreshes complete.
+
+Why this is useful
+It refreshes all the wired data at once.
+If every refresh succeeds, the code continues and logs Refresh complete.
+If any refresh fails, Promise.all throws and the catch block handles the error.
+
+In short
+refreshApex reloads wire data from Salesforce.
+Promise.all waits for all refresh calls to finish together. -->

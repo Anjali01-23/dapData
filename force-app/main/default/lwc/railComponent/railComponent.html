@@ -1,0 +1,253 @@
+<template>
+  <div class="con">
+    <br />
+    <lightning-icon
+      icon-name="utility:trail"
+      alternative-text="Train"
+      title="Train"
+      size="medium"
+    ></lightning-icon>
+    <div>
+      <h1 class="slds-text-title_bold slds-text-heading_large">RailConnect</h1>
+      <h2>Reservation Management Console</h2>
+    </div>
+  </div>
+  <br />
+  <br />
+  <lightning-tabset>
+    <lightning-tab label="Dashboard">
+      <div>
+        <div></div>
+
+        <div class="slds-grid slds-grid_align-end">
+            <lightning-button label="Refresh" icon-name="utility:refresh" onclick={refresh1}></lightning-button>
+        </div>
+
+        <div class="slds-grid slds-wrap">
+          <div class="slds-col slds-size_4-of-12 slds-p-around_medium">
+             <div class="slds-box">
+
+            
+            <p class="slds-align_absolute-center">Total Trains</p>
+            <p
+              class="slds-align_absolute-center slds-text-heading_large slds-text-color_success"
+            >
+              {data0}
+            </p>
+             </div>
+          </div>
+          <div class="slds-col slds-size_4-of-12 slds-p-around_medium">
+            <div class="slds-box">
+            <p class="slds-align_absolute-center">Total reservations</p>
+            <p
+              class="slds-align_absolute-center slds-text-heading_large slds-text-color_error"
+            >
+              {data1}
+            </p>
+            </div>
+          </div>
+          <div class="slds-col slds-size_4-of-12 slds-p-around_medium">
+            <p class="slds-align_absolute-center">Confirmed Reservations</p>
+            <p
+              class="slds-align_absolute-center slds-text-heading_large slds-text-color_warning"
+            >
+              {data2}
+            </p>
+          </div>
+          <div class="slds-col slds-size_4-of-12 slds-p-around_medium">
+            <p class="slds-align_absolute-center">Waiting List Reservations</p>
+            <p
+              class="slds-align_absolute-center slds-text-heading_large slds-text-color_success"
+            >
+              {data3}
+            </p>
+          </div>
+          <div class="slds-col slds-size_4-of-12 slds-p-around_medium">
+            <p class="slds-align_absolute-center">Canceled Reservations</p>
+            <p
+              class="slds-align_absolute-center slds-text-heading_large slds-text-color_error"
+            >
+              {data4}
+            </p>
+          </div>
+          <div class="slds-col slds-size_4-of-12 slds-p-around_medium">
+            <p class="slds-align_absolute-center">Today's Departure</p>
+            <p
+              class="slds-align_absolute-center slds-text-heading_large slds-text-color_success"
+            >
+              {data5}
+            </p>
+          </div>
+          <div class="slds-col slds-size_4-of-12 slds-p-around_medium">
+            <p class="slds-align_absolute-center">Available Seats</p>
+            <p
+              class="slds-align_absolute-center slds-text-heading_large slds-text-color_warning"
+            >
+              {data6}
+            </p>
+          </div>
+          <div class="slds-col slds-size_4-of-12 slds-p-around_medium">
+            <p class="slds-align_absolute-center">Occupancy Percentage</p>
+            <p
+              class="slds-align_absolute-center slds-text-heading_large slds-text-color_error"
+            >
+              {data7}
+            </p>
+          </div>
+        </div>
+      </div>
+    </lightning-tab>
+
+    <lightning-tab label="Reservation">
+         <div class="slds-grid slds-grid_align-end">
+            <lightning-button label="New Reservation" icon-name="utility:add" onclick={openModal}></lightning-button>
+        </div>
+      <div class="slds-grid slds-wrap">
+        <div class="slds-col slds-size_2-of-12 slds-m-right_medium">
+             <lightning-input label="Search by Train Number" placeholder="Enter Train Number" onchange={handle1} value={val1}> </lightning-input> 
+            </div> 
+        <div class="slds-col slds-size_2-of-12 slds-m-right_medium">
+          <lightning-input label="Search by Reservation Number" placeholder="Enter Reservation Number" onchange={handle2} value={val2}> </lightning-input>
+        </div>
+        <div class="slds-col slds-align-bottom">
+            <lightning-button label="Refresh" icon-name="utility:refresh" onclick={refresh2}></lightning-button>
+        </div>
+      </div>
+
+      <!-- <lightning-datatable
+        data={paginatedData}
+        columns={columns}
+        key-field="Id"
+        onrowaction={handleRowAction}
+        hide-checkbox-column
+      >
+      </lightning-datatable> -->
+
+
+      <table class="slds-table slds-table_bordered slds-m-top_medium">
+         <thead>
+             <tr>
+                 <th>Reservation Number</th>
+                 <th>Passenger Name</th>
+                 <th>Train Number</th>
+                 <th>Journey Date</th>
+                 <th>Status</th>
+                 <th>Reservation Amount</th>
+                 <th>Action</th>
+             </tr>
+         </thead>
+
+         <tbody>
+             <template for:each={paginatedData} for:item="rec">
+                 <tr key={rec.Id}>
+
+                     <!-- 🔥 NAME -->
+                     <td >
+                       {rec.Name} 
+                     </td>
+                     <td >
+                       {rec.passName} 
+                     </td>
+                     <td >
+                       {rec.trainNo} 
+                     </td>
+                     <td >
+                       {rec.Journey_Date__c} 
+                     </td>
+                     <td >
+                       {rec.Status__c} 
+                     </td>
+
+                     <!-- 🔥 STAGE -->
+                     <td>
+                         
+                             {rec.Amount__c}
+                        
+                     </td>
+
+                     <td>
+                    <lightning-button
+                        icon-name="utility:preview"
+                        label="View"
+                        title="View Details"
+                        onclick={handleRowAction}
+                        data-id={rec.Id}
+                        variant="border-filled">
+                    </lightning-button>
+                </td>
+                 </tr>
+             </template>
+         </tbody>
+     </table>
+
+       <div class="slds-align_absolute-center slds-m-top_medium">
+            <lightning-button label="Previous" onclick={handlePrevious} disabled={isPreviousDisabled}></lightning-button>
+            <span class="slds-m-horizontal_medium">Page {currentPage} of {totalPages}</span>
+            <lightning-button label="Next" onclick={handleNext} disabled={isNextDisabled}></lightning-button>
+        </div>
+    </lightning-tab>
+  </lightning-tabset>
+
+
+
+
+
+
+
+
+  <template if:true={isEditModal}>
+     <section class="slds-modal slds-fade-in-open">
+      <div class="slds-modal__container">
+        <header class="slds-modal__header">
+          <h2 class="slds-text-heading_medium">New Booking</h2>
+          <button class="slds-modal__close btn" onclick={closeModaledit} >
+            <lightning-icon
+        icon-name="utility:close"
+        alternative-text="Close"
+        size="small"
+        class="iconC"
+    ></lightning-icon>
+    
+          </button>
+        </header>
+
+        
+        <div class="slds-modal__content slds-p-around_medium">
+      <lightning-record-edit-form object-api-name="Booking__c"  onsuccess={savehandle} onerror={errorhandle}>
+      <div class="slds-grid slds-wrap">
+        <div class="slds-col slds-size_1-of-2">
+        <lightning-input-field field-name="Passenger11__c" ></lightning-input-field>
+        <lightning-input-field field-name="Source__c" ></lightning-input-field>
+        <lightning-input-field field-name="Destination__c" ></lightning-input-field>
+        <lightning-input-field field-name="Journey_Date__c"></lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+         <lightning-input-field field-name="Status__c"></lightning-input-field>
+        <lightning-input-field field-name="Train11__c"  onchange={handleTrainChange}></lightning-input-field>
+        <lightning-input-field field-name="Seat_Count__c"></lightning-input-field>
+        <lightning-input-field field-name="Quota__c"></lightning-input-field>
+         <lightning-input
+    label="Remaining Seats"
+    value={remainingSeats}
+    readonly> </lightning-input>
+        </div>
+        </div>
+  
+        
+      
+        <lightning-button type="submit" label="Save"></lightning-button>
+      </lightning-record-edit-form>
+        </div>
+
+        <footer class="slds-modal__footer">
+        <lightning-button variant="brand" label="Close"  onclick={closeModaledit} class="slds-m-left_x-small a4 slds-p-around_xxx-small"></lightning-button>
+        </footer>
+      </div>
+     </section>
+     <div class="slds-backdrop slds-backdrop_open">
+      </div>
+    </template>
+
+
+    
+</template>

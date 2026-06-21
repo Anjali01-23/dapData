@@ -6,7 +6,7 @@
     </template>
 
     <lightning-card title="Import CSV Data in Lightning Web Components" icon-name="doctype:csv">
-        <center>
+        <div class="slds-align_absolute-center slds-p-around_medium" style="flex-direction: column;">
             <div>
                 <lightning-input label="" name="file uploader" onchange={handleFilesChange} type="file" multiple></lightning-input>
             </div><br/>
@@ -14,9 +14,9 @@
             <div>
                 <lightning-button class="slds-m-top--medium" label="Import Data" onclick={handleSave} variant="brand" disabled={isTrue}></lightning-button>
             </div>
-        </center>
+        </div>
     </lightning-card>
-    <lightning-card title="Contacts" icon-name="standard:contact">
+    <lightning-card title="Employee Uploader" icon-name="standard:contact">
         <div style="width: auto;">
             <template if:true={data}>
                     <lightning-datatable data={data} columns={columns} key-field="id" hide-checkbox-column="true"></lightning-datatable>

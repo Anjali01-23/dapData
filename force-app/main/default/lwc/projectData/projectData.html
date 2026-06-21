@@ -1,0 +1,90 @@
+<template>
+    <div class="container slds-theme_inverse slds-p-around_large">
+    
+            <lightning-card title="Total Revenue" class="c1"> 
+              {data0}
+            </lightning-card>
+     
+    
+
+    
+            <lightning-card title="Total Projects" class="c1">
+             {data1}
+            </lightning-card>
+     
+
+   
+            <lightning-card title="Time Spent" class="c1">
+             {data3}/{data2}
+            </lightning-card>
+
+             <lightning-combobox
+                            name="managerFilter"
+                            label="Project Manager"
+                            value={selectedManager}
+                            options={managerOptions}
+                            onchange={handleManagerChange} >
+                        </lightning-combobox>
+
+                          <lightning-combobox
+                            name="statusFilter"
+                            label="Status"
+                            value={selectedStatus}
+                            options={statusOptions}
+                            onchange={handleStatusChange} >
+                        </lightning-combobox>
+      <div style="height:200px;">    
+    <c-custom-data-table-comp 
+        data={data4} 
+        columns={columns} 
+        key-field="Id"   
+        enable-infinite-loading
+        onloadmore={loadMoreData}
+            load-more-offset="20"
+        hide-checkbox-column="true">
+    </c-custom-data-table-comp>
+</div> 
+
+       
+        <lightning-card title="Overall Progress">
+
+    <c-gauge-chart
+
+    percentage={overallProgress.percentage}
+
+    completed={overallProgress.completed}
+
+    delayed={overallProgress.delayed}
+
+    going={overallProgress.ongoing}
+
+></c-gauge-chart>
+
+    <div class="slds-grid slds-m-top_medium">
+
+        <div class="slds-col slds-size_1-of-4">
+            <b>{overallProgress.total}</b>
+            <p>Total</p>
+        </div>
+
+        <div class="slds-col slds-size_1-of-4">
+            <b>{overallProgress.completed}</b>
+            <p>Completed</p>
+        </div>
+
+        <div class="slds-col slds-size_1-of-4">
+            <b>{overallProgress.delayed}</b>
+            <p>Delayed</p>
+        </div>
+
+        <div class="slds-col slds-size_1-of-4">
+            <b>{overallProgress.ongoing}</b>
+            <p>Ongoing</p>
+        </div>
+
+    </div>
+
+</lightning-card>
+
+    </div>
+</template>

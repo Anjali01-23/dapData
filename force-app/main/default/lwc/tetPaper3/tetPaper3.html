@@ -1,0 +1,625 @@
+<template>
+  <lightning-layout>
+    <lightning-layout-item size="5" medium-size="6" large-size="4">
+      <lightning-card title="Create Resume for ?">
+        <div class="container">
+          <lightning-icon
+            icon-name="standard:people"
+            size="large"
+            class="slds-m-around_medium"
+            onclick={Fresh}
+          >
+          </lightning-icon>
+
+          <lightning-icon
+            icon-name="standard:person_account"
+            size="large"
+            class="slds-m-around_medium"
+            onclick={Exper}
+          >
+          </lightning-icon>
+        </div>
+
+        <div>
+          <span class="slds-m-around_medium">Fresher</span>
+          <span class="slds-m-around_medium">Experience</span>
+        </div>
+      </lightning-card>
+    </lightning-layout-item>
+  </lightning-layout>
+
+  <template lwc:if={isFresher}>
+    <lightning-progress-indicator
+      current-step={currentStep}
+      type="path"
+      has-error="true"
+      variant="base"
+    >
+      <lightning-progress-step
+        label="Personal Information"
+        value="1"
+        onclick={onOne}
+      ></lightning-progress-step>
+      <lightning-progress-step
+        label="Academics"
+        value="2"
+        onclick={handleNext1}
+      ></lightning-progress-step>
+      <lightning-progress-step
+        label="Extra"
+        value="3"
+        onclick={handleNext2}
+      ></lightning-progress-step>
+    </lightning-progress-indicator>
+    <br />
+    <br />
+
+    <!-- Step1 -->
+    <template lwc:if={isStep1}>
+      <div class="slds-grid slds-wrap">
+        <div class="slds-col slds-size_2-of-2 slds-text-align_right">
+          <lightning-button label="Add Field" onclick={handleModal}>
+          </lightning-button>
+        </div>
+        <span class="slds-text-color_destructive">*</span>
+
+        <div class="slds-col slds-size_1-of-2">
+          <span>Name</span>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-combobox
+            name="Salutation"
+            label="Salutation"
+            value={value}
+            options={options}
+            onchange={handleChange}
+          ></lightning-combobox>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="Phone" onchange={handleChange1} value={personalInfo.Phone} data-field="Phone" ></lightning-input>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="First Name" onchange={handleChange1} value={personalInfo.FirstName} data-field="FirstName"></lightning-input>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="Date of Birth" type="date" onchange={handleChange1} value={personalInfo.DOB} data-field="DOB"></lightning-input>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="Last Name" required onchange={handleChange1} value={personalInfo.LastName} data-field="LastName"></lightning-input>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="Address" onchange={handleChange1} value={personalInfo.Address} data-field="Address"></lightning-input>
+        </div>
+         <div class="slds-col slds-size_1-of-2">
+        <lightning-input
+    type="file"
+    label="Upload Image"
+    accept=".png,.jpg,.jpeg"
+    onchange={handleFile}>
+</lightning-input>
+            </div>
+
+        <template for:each={extraFields1} for:item="item1">
+          <div class="slds-col slds-size_1-of-2" key={item1.label}>
+            <lightning-input label={item1.label} value={item1.value} onchange={handleChange4} data-field={item1.label}></lightning-input>
+          </div>
+        </template>
+
+      </div>
+
+      <lightning-button
+          label="Next"
+          class="slds-button"
+          variant="Brand"
+          onclick={handleNext1}
+        ></lightning-button>
+    </template>
+
+
+
+    <!-- Step2 -->
+    <template lwc:if={isStep2}>
+       <div class="slds-grid slds-wrap">
+        <div class="slds-col slds-size_2-of-2 slds-text-align_right">
+          <lightning-button label="Add Field" onclick={handleModal}>
+          </lightning-button>
+        </div>
+    
+
+    
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="Secondary School" onchange={handleChange2} data-field="ten" value={academics.ten}></lightning-input>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="Senior Secondary School" onchange={handleChange2} data-field="twelve" value={academics.twelve}></lightning-input>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="College" onchange={handleChange2} data-field="College" value={academics.College}></lightning-input>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="College CGPA" required onchange={handleChange2} data-field="CGPA" value={academics.CGPA}></lightning-input>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label=" Technical Skills" onchange={handleChange2} data-field="Technical" value={academics.Technical}></lightning-input>
+        </div>
+
+        <template for:each={extraFields2} for:item="item1">
+          <div class="slds-col slds-size_1-of-2" key={item1.label}>
+            <lightning-input label={item1.label} value={item1.value} onchange={handleChange5} data-field={item1.label}></lightning-input>
+          </div>
+        </template>
+
+      </div>
+         <lightning-button
+                label='Back'
+                class="slds-button"
+                variant=neutral
+                onclick={onOne}
+            ></lightning-button>
+
+        <lightning-button
+          label="Next"
+          class="slds-button"
+          variant="Brand"
+          onclick={handleNext2}
+        ></lightning-button>
+    </template>
+
+
+    <!-- Step3 -->
+
+    <template lwc:if={isStep3}> 
+
+        <div class="slds-grid slds-wrap">
+        <div class="slds-col slds-size_2-of-2 slds-text-align_right">
+          <lightning-button label="Add Field" onclick={handleModal}>
+          </lightning-button>
+        </div>
+    
+
+    
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="Soft Skills" value={extras.soft} data-field="soft" onchange={handleChange3}></lightning-input>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="Awards and Achievements" value={extras.awards} data-field="awards" onchange={handleChange3}></lightning-input>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="Hackathons" value={extras.hack} data-field="hack" onchange={handleChange3}></lightning-input>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="Internships" required value={extras.intern} data-field="intern" onchange={handleChange3}></lightning-input>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="Hobbies" value={extras.hobbies} data-field="hobbies" onchange={handleChange3}></lightning-input>
+        </div>
+
+
+        <template for:each={extraFields3} for:item="item1">
+          <div class="slds-col slds-size_1-of-2" key={item1.label}>
+            <lightning-input label={item1.label} value={item1.value} onchange={handleChange6} data-field={item1.label}></lightning-input>
+          </div>
+        </template>
+
+      </div>
+
+       <lightning-button
+                label='Back'
+                class="slds-button"
+                variant=neutral
+                onclick={onSecond}
+            ></lightning-button>
+
+        <lightning-button
+          label="Submit"
+          class="slds-button"
+          variant="Brand"
+          onclick={submitButton}
+        ></lightning-button>
+    </template>
+
+  </template>
+
+
+
+
+  <!-- Experience -->
+
+  <template lwc:if={isExper}>
+    <lightning-progress-indicator
+      current-step={currentStep}
+      type="path"
+      has-error="true"
+      variant="base"
+    >
+      <lightning-progress-step
+        label="Personal Information"
+        value="1"
+        onclick={onOne}
+      ></lightning-progress-step>
+      <lightning-progress-step
+        label="Experience"
+        value="2"
+        onclick={handleNext1}
+      ></lightning-progress-step>
+      <lightning-progress-step
+        label="Extra"
+        value="3"
+        onclick={handleNext2}
+      ></lightning-progress-step>
+    </lightning-progress-indicator>
+
+    <br>
+    <br>
+
+    <!-- Step1 -->
+    <template lwc:if={isStep1}>
+      <div class="slds-grid slds-wrap">
+        <div class="slds-col slds-size_2-of-2 slds-text-align_right">
+          <lightning-button label="Add Field" onclick={handleModal}>
+          </lightning-button>
+        </div>
+        <span class="slds-text-color_destructive">*</span>
+
+        <div class="slds-col slds-size_1-of-2">
+          <span>Name</span>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-combobox
+            name="Salutation"
+            label="Salutation"
+            value={value}
+            options={options}
+            onchange={handleChange}
+          ></lightning-combobox>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="Phone" onchange={handleChangeExp1} value={personalInfo.Phone} data-field="Phone" ></lightning-input>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="First Name" onchange={handleChangeExp1} value={personalInfo.FirstName} data-field="FirstName"></lightning-input>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="Date of Birth" type="date" onchange={handleChangeExp1} value={personalInfo.DOB} data-field="DOB"></lightning-input>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="Last Name" required onchange={handleChangeExp1} value={personalInfo.LastName} data-field="LastName"></lightning-input>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="Address" onchange={handleChangeExp1} value={personalInfo.Address} data-field="Address"></lightning-input>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+        <lightning-input
+    type="file"
+    label="Upload Image"
+    accept=".png,.jpg,.jpeg"
+    onchange={handleFile}>
+</lightning-input>
+            </div>
+
+        <template for:each={extraFields1} for:item="item1">
+          <div class="slds-col slds-size_1-of-2" key={item1.label}>
+            <lightning-input label={item1.label} value={item1.value} onchange={handleChange4} data-field={item1.label}></lightning-input>
+          </div>
+        </template>
+
+      </div>
+
+      <lightning-button
+          label="Next"
+          class="slds-button"
+          variant="Brand"
+          onclick={handleNext1}
+        ></lightning-button>
+    </template>
+
+
+
+    <!-- Step2 -->
+    <template lwc:if={isStep2}>
+       <div class="slds-grid slds-wrap">
+        <div class="slds-col slds-size_2-of-2 slds-text-align_right">
+          <lightning-button label="Add Field" onclick={handleModal}>
+          </lightning-button>
+        </div>
+    
+
+    
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="Work Experience" onchange={handleChangeExp2} value={experData.work} data-field="work"></lightning-input>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="Certificates" onchange={handleChangeExp2} value={experData.certificate} data-field="certificate"></lightning-input>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="Projects" onchange={handleChangeExp2} value={experData.project} data-field="project"></lightning-input>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="Skills" required onchange={handleChangeExp2} value={experData.skill} data-field="skill"></lightning-input>
+        </div>
+
+
+        <template for:each={extraFields2} for:item="item1">
+          <div class="slds-col slds-size_1-of-2" key={item1.label}>
+            <lightning-input label={item1.label} value={item1.value} onchange={handleChange5} data-field={item1.label}></lightning-input>
+          </div>
+        </template>
+
+      </div>
+         <lightning-button
+                label='Back'
+                class="slds-button"
+                variant=neutral
+                onclick={onOne}
+            ></lightning-button>
+
+        <lightning-button
+          label="Next"
+          class="slds-button"
+          variant="Brand"
+          onclick={handleNext2}
+        ></lightning-button>
+    </template>
+
+
+    <!-- Step3 -->
+
+    <template lwc:if={isStep3}> 
+
+        <div class="slds-grid slds-wrap">
+        <div class="slds-col slds-size_2-of-2 slds-text-align_right">
+          <lightning-button label="Add Field" onclick={handleModal}>
+          </lightning-button>
+        </div>
+    
+
+    
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="Soft Skills" onchange={handleChangeExp3} value={extrass1.soft} data-field="soft"></lightning-input>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="Awards and Achievements" onchange={handleChangeExp3} value={extrass1.awards} data-field="awards"></lightning-input>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="Seminars" onchange={handleChangeExp3} value={extrass1.seminars} data-field="seminars"></lightning-input>
+        </div>
+
+
+        <div class="slds-col slds-size_1-of-2">
+          <lightning-input label="Hobbies" onchange={handleChangeExp3} value={extrass1.hobbies} data-field="hobbies"></lightning-input>
+        </div>
+
+
+       <template for:each={extraFields3} for:item="item1">
+          <div class="slds-col slds-size_1-of-2" key={item1.label}>
+            <lightning-input label={item1.label} value={item1.value} onchange={handleChange6} data-field={item1.label}></lightning-input>
+          </div>
+        </template>
+
+      </div>
+
+       <lightning-button
+                label='Back'
+                class="slds-button"
+                variant=neutral
+                onclick={onSecond}
+            ></lightning-button>
+
+        <lightning-button
+          label="Submit"
+          class="slds-button"
+          variant="Brand"
+          onclick={submitButton1}
+        ></lightning-button>
+    </template>
+    
+  </template>
+
+  <template lwc:if={showResume}>
+     <lightning-layout>
+    <lightning-layout-item size="10" medium-size="12" large-size="9">
+    <lightning-card>
+
+    <template if:true={imageUrl}>
+                <div>
+                    <img src={imageUrl} alt="Profile Image" style="max-width: 150px; "/>
+                </div>
+            </template>
+    <h1 class="slds-text-heading_large">{value}{empty}{personalInfo.FirstName}{empty}{personalInfo.LastName}</h1>
+    
+    <br>
+    <br>
+        <h1 class="slds-text-heading_small ">Personal Information</h1>
+        <br>
+        <template if:true={personalInfo.Address}>
+        <h1>Address</h1>
+        <h1>{personalInfo.Address}</h1>
+        </template>
+        <br>
+        <h1>Phone</h1>
+        <h1>{personalInfo.Phone}</h1>
+        <br>
+        <h1>Date of Birth</h1>
+        <h1>{personalInfo.DOB}</h1>
+        <template for:each={extraFields1} for:item="item1">
+        <br key={item1.label}>
+        <h1 key={item1.label}>{item1.label}</h1>
+        <h1 key={item1.label}>{item1.value}</h1>
+        </template>
+        <br>
+    <br>
+        <h1 class="slds-text-heading_small ">Education</h1>
+        <br>
+        <template if:true={academics.Secondary}>
+        <h1>Secondary School</h1>
+        <h1>{academics.ten}</h1>
+        </template>
+        <br>
+        <h1>Senior Secondary School</h1>
+        <h1>{academics.twelve}</h1>
+        <br>
+        <h1>College</h1>
+        <h1>{academics.College}</h1>
+        <br>
+        <h1>CGPA</h1>
+        <h1>{academics.CGPA}</h1>
+        <br>
+        <h1>Technical Skills</h1>
+        <h1>{academics.Technical}</h1>
+        
+        <template for:each={extraFields2} for:item="item1">
+        <br key={item1.label}>
+        <h1 key={item1.label}>{item1.label}</h1>
+        <h1 key={item1.label}>{item1.value}</h1>
+        </template>
+        
+        <br>
+    <br>
+        <h1 class="slds-text-heading_small ">Additional Information</h1>
+        <br>
+        <template if:true={extras.soft}>
+        <h1>Soft Skills</h1>
+        <h1>{extras.soft}</h1>
+        </template>
+        <br>
+        <h1>Awards and Achievements</h1>
+        <h1>{extras.awards}</h1>
+        <br>
+        <h1>Hackathons</h1>
+        <h1>{extras.hack}</h1>
+        <br>
+        <h1>Internship</h1>
+        <h1>{extras.intern}</h1>
+        <br>
+        <h1>Hobbies</h1>
+        <h1>{extras.hobbies}</h1>
+
+        <template for:each={extraFields2} for:item="item1">
+        <br key={item1.label}>
+        <h1 key={item1.label}>{item1.label}</h1>
+        <h1 key={item1.label}>{item1.value}</h1>
+        </template>
+
+    </lightning-card>
+    </lightning-layout-item>
+     </lightning-layout>
+  </template>
+
+<!-- For Experience -->
+
+<template lwc:if={showResume1}>
+     <lightning-layout>
+    <lightning-layout-item size="10" medium-size="12" large-size="9">
+    <lightning-card>
+
+    <template if:true={imageUrl}>
+                <div>
+                    <img src={imageUrl} alt="Profile Image" style="max-width: 150px; "/>
+                </div>
+            </template>
+    <h1 class="slds-text-heading_large">{value}{empty}{personalInfo.FirstName}{empty}{personalInfo.LastName}</h1>
+    
+    <br>
+    <br>
+        <h1 class="slds-text-heading_small ">Personal Information</h1>
+        <br>
+        <template if:true={personalInfo.Address}>
+        <h1>Address</h1>
+        <h1>{personalInfo.Address}</h1>
+        </template>
+        <br>
+        <h1>Phone</h1>
+        <h1>{personalInfo.Phone}</h1>
+        <br>
+        <h1>Date of Birth</h1>
+        <h1>{personalInfo.DOB}</h1>
+        <template for:each={extraFields1} for:item="item1">
+        <br key={item1.label}>
+        <h1 key={item1.label}>{item1.label}</h1>
+        <h1 key={item1.label}>{item1.value}</h1>
+        </template>
+        <br>
+    <br>
+        <h1 class="slds-text-heading_small ">Experience</h1>
+        <br>
+        <template if:true={experData.work}>
+        <h1>Work Experience</h1>
+        <h1>{experData.work}</h1>
+        </template>
+        <br>
+        <h1>Certificates</h1>
+        <h1>{experData.certificate}</h1>
+        <br>
+        <h1>Projects</h1>
+        <h1>{experData.project}</h1>
+        <br>
+      
+        <h1>Skills</h1>
+        <h1>{experData.skill}</h1>
+        
+        <template for:each={extraFields2} for:item="item1">
+        <br key={item1.label}>
+        <h1 key={item1.label}>{item1.label}</h1>
+        <h1 key={item1.label}>{item1.value}</h1>
+        </template>
+        
+        <br>
+    <br>
+        <h1 class="slds-text-heading_small ">Additional Information</h1>
+        <br>
+        <template if:true={extrass1.soft}>
+        <h1>Soft Skills</h1>
+        <h1>{extrass1.soft}</h1>
+        </template>
+        <br>
+        <h1>Awards and Achievements</h1>
+        <h1>{extrass1.awards}</h1>
+        <br>
+        <h1>Seminars</h1>
+        <h1>{extrass1.seminars}</h1>
+        <br>
+        <h1>Hobbies</h1>
+        <h1>{extrass1.hobbies}</h1>
+
+        <template for:each={extraFields3} for:item="item1">
+        <br key={item1.label}>
+        <h1 key={item1.label}>{item1.label}</h1>
+        <h1 key={item1.label}>{item1.value}</h1>
+        </template>
+
+    </lightning-card>
+    </lightning-layout-item>
+     </lightning-layout>
+  </template>
+
+</template>

@@ -1,9 +1,9 @@
 public with sharing class ImportCSVHandler {    
 
     @AuraEnabled
-    public static List<Contact> ReadCSVFile(String base64Data) {
+    public static List<Employee_Performance__c> ReadCSVFile(String base64Data) {
         String data=JSON.deserializeUntyped(base64Data).toString();
-        List<Contact> lstAcc = new List<Contact>();
+        List<Employee_Performance__c> lstAcc = new List<Employee_Performance__c>();
         List<String> lstCSVLines = data.split('\n');
         for(Integer i = 1; i < lstCSVLines.size(); i++){           
             String csvLine = lstCSVLines[i];
@@ -37,10 +37,12 @@ public with sharing class ImportCSVHandler {
                 csvRowData.add(column);
             }         
             
-            lstAcc.add(new Contact(
-                LastName = csvRowData[0],
-                Email=csvRowData[1],
-                LeadSource=csvRowData[2]     
+            lstAcc.add(new Employee_Performance__c(
+                	Employee_Performance_Name__c = csvRowData[0],
+                Productivity__c=Decimal.valueOf(csvRowData[1]),
+                Attendance__c=Decimal.valueOf(csvRowData[2]),
+                Problem_Solving_Skills__c=Decimal.valueOf(csvRowData[3]),
+                Pressure_Management__c=Decimal.valueOf(csvRowData[4])   
             ));
         }       
         return lstAcc;       
@@ -50,8 +52,8 @@ public with sharing class ImportCSVHandler {
     public static string SaveFile(string jsonString){
         string sMessage='';
         try {
-            List<Contact> lstACCToInsert=(List<Contact>)JSON.deserialize(jsonString, List<Contact>.class);
-            insert lstACCToInsert;
+            List<Employee_Performance__c> lstACCToInsert=(List<Employee_Performance__c>)JSON.deserialize(jsonString, List<Employee_Performance__c>.class);
+            //insert lstACCToInsert;
             sMessage='SUCCESS';
         } catch (Exception e) {
             sMessage=e.getMessage();

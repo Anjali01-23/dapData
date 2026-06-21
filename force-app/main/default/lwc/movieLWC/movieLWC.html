@@ -1,0 +1,177 @@
+<template>
+
+  <div class="newOne">MovieVerse</div>
+  <br>
+
+    
+            <br>
+    <lightning-progress-indicator
+      current-step={currentStep}
+      type="base"
+      has-error="true"
+      variant="base"
+    >
+      <lightning-progress-step
+        label="Browse"
+        value="1"
+        onclick={onOne}
+      ></lightning-progress-step>
+      <lightning-progress-step
+        label="Select Seats"
+        value="2"
+        onclick={onSecond}
+      ></lightning-progress-step>
+      <lightning-progress-step
+        label="Confirm"
+        value="3"
+        onclick={onThird}
+      ></lightning-progress-step>
+    </lightning-progress-indicator>
+<br>
+<!-- slds-is-disabled -->
+    <template lwc:if={isStep1}>
+
+      <lightning-combobox
+            name="progress"
+            label="Status"
+            value={value}
+            placeholder="All Genres"
+            options={options}
+            onchange={handleChange} ></lightning-combobox>
+
+             <lightning-input
+            values={dates}
+            type="date"
+            onchange={handleChange1} ></lightning-input>
+           
+      <lightning-layout multiple-rows>
+      
+        <template for:each={datas} for:item="item1">
+          <lightning-layout-item
+            key={item1}
+            size="12"
+            small-device-size="6"
+            medium-device-size="4"
+            large-device-size="3"
+            padding="around-small">
+     <template lwc:if={item1.HouseFULL__c}>
+      <lightning-card title="" class="carddimmed container" >
+        <a onclick={handleModal} data-detail={item1.FullDetails__c}>{item1.Movie_Name__c}</a>
+        <p>{item1.Location__c}</p>
+       <span>{item1.Genre__c}{empty}</span>
+       <span>Rating->{item1.Rating__c}</span>
+       <p class="slds-text-color_error">Available Seats -> HOUSEFULL </p>
+        <lightning-button label="Silver"  class="slds-m-left_x-small" onclick={m1}></lightning-button>
+        <lightning-button label="Gold"  class="slds-m-left_x-small" onclick={m1}></lightning-button>
+         <lightning-button label="Platinum"  class="slds-m-left_x-small" onclick={m1}></lightning-button>
+      </lightning-card>
+      </template>
+
+
+      <template lwc:else>
+    
+      <lightning-card title=""  class="container">
+        <a onclick={handleModal} data-detail={item1.FullDetails__c}>{item1.Movie_Name__c}</a>
+        <p>{item1.Location__c}</p>
+       <span>{item1.Genre__c}{empty}</span>
+       <span>Rating->{item1.Rating__c}</span>
+       <p >Available Seats -> {item1.Available_Seats__c}</p>
+        <lightning-button label="Silver"  class="slds-m-left_x-small" onclick={m1} data-showname={item1.Name}></lightning-button>
+        <lightning-button label="Gold"  class="slds-m-left_x-small" onclick={m1} data-showname={item1.Name}></lightning-button>
+         <lightning-button label="Platinum"  class="slds-m-left_x-small" onclick={m1} data-showname={item1.Name}></lightning-button>
+
+      </lightning-card>
+        </template>
+        </lightning-layout-item>
+         </template>
+    
+     </lightning-layout>
+   
+    
+ <br><br>
+     <lightning-button
+                label='Cancel'
+                class="slds-button"
+                variant=neutral
+                onclick={m2}
+            ></lightning-button>
+
+         <template lwc:if={continues}>
+        <lightning-button
+          label="Continue"
+          class="slds-button"
+          variant="Brand"
+          onclick={handleNext2}
+        ></lightning-button>
+        </template>
+        <template lwc:else>
+        <lightning-button
+          label="Continue"
+          class="slds-button"
+          variant="Brand"
+          onclick={handleNext2}
+          disabled
+        ></lightning-button>
+        </template>
+    </template>
+
+    <template lwc:if={isStep2}>
+          
+          <template for:each={newData} for:item="item1">
+          <lightning-card key={item1}>
+           <p>Movie{emptyy}{item1.Movie_Name__c}</p>
+           <p>Theatre{emptyy}{item1.Location__c}</p>
+           <p>Date{emptyy}{item1.Show_Time__c}</p>
+           <p>SeatType{emptyy}{seatType}</p>
+           <template lwc:if={silver}>
+           <p>Seat Price{emptyy}{item1.Silver_Price__c}</p>
+           </template>
+           <template lwc:elseif={gold}>
+           <p>Seat Price{emptyy}{item1.Gold_Price__c}</p>
+           </template>
+           <template lwc:else>
+           <p>Seat Price{emptyy}{item1.Platinum_Price__c}</p>
+           </template>
+           <p>Available Seats{emptyy}{item1.Available_Seats__c}</p>
+          </lightning-card>
+          </template>
+           <br>
+        <br>
+        <lightning-card title="Customer Detail">
+          <p>Name</p>
+          <lightning-input label="FullName" required></lightning-input>
+          <p>Email Address</p>
+          <lightning-input label="FullName" required></lightning-input>
+          <p>Phone Number</p>
+          <lightning-input label="FullName" required></lightning-input>
+        </lightning-card>
+
+
+        <lightning-card title="Number Of Seats">
+        <lightning-button label="-" onclick={handleMinus} class="slds-m-left_x-small"></lightning-button>
+        <lightning-input value={seats}></lightning-input>
+        <lightning-button label="+" onclick={handlePlus} class="slds-m-left_x-small"></lightning-button>
+        </lightning-card>
+
+
+        <lightning-card title="Have a Coupon">
+        <lightning-input placeholder="Enter Coupon Code"></lightning-input>
+        <lightning-button label="Apply" onclick={applyCode} class="slds-m-left_x-small"></lightning-button>
+        </lightning-card>
+
+    </template>
+
+    <template lwc:if={isStep3}>
+        ho
+    </template>
+</template>
+
+
+
+
+
+
+
+
+
+

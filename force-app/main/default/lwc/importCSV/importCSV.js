@@ -4,9 +4,11 @@ import { LightningElement, track } from 'lwc';
  import {ShowToastEvent} from 'lightning/platformShowToastEvent';
 
  const columns = [
-   { label: "Name", fieldName: "LastName" },
-   { label: "Email", fieldName: "Email" },
-   { label: "Lead Source", fieldName: "LeadSource" },        
+   { label: "Employee Performance Name", fieldName: "Employee_Performance_Name__c" },
+   { label: "Productivity", fieldName: "Productivity__c" },
+   { label: "Attendance", fieldName: "Attendance__c" },
+   { label: "Problem Solving Skills", fieldName: "Problem_Solving_Skills__c" },
+   { label: "Pressure Management", fieldName: "Pressure_Management__c" },        
  ]; 
 
  export default class ImportCSV extends LightningElement {   

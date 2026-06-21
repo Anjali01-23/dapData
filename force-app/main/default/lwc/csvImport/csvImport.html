@@ -1,0 +1,33 @@
+<template>
+  <lightning-card title="CSV To Datatable" icon-name="doctype:csv">
+    <div class="slds-p-around_medium">
+      <lightning-input
+        type="file"
+        label="Please upload a UTF-8 encoded, comma separated .csv file"
+        accept=".csv"
+        onchange={handleFileUpload}
+      >
+      </lightning-input>
+    </div>
+
+    <div style="height: 300px">
+      <template lwc:if={datanew}>
+      <lightning-datatable key-field="id" data={data} columns={columns} hide-checkbox-column> </lightning-datatable>
+      </template>
+    </div>
+
+    <lightning-button label="Generate Result" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+
+    <template lwc:if={newTable}>
+         <lightning-datatable key-field="id" data={Newdata} columns={columns1} hide-checkbox-column> </lightning-datatable> 
+    </template>
+  </lightning-card>
+
+
+
+    <lightning-card title="By Rating">
+        <div class="chart-container">
+            <canvas></canvas>
+        </div>
+    </lightning-card>
+</template>

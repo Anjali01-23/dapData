@@ -1,7 +1,10 @@
-trigger SMStrigger on Student__c (after insert) {
-  List<Student__c>studentt=Trigger.new;
-    for(Student__c s:studentt){
-        apiSMS.method(s.Student_Name__c,s.Student_Phone__c,s.Student_Email__c);
-        apiIPAddress.method(s.IPAddress__c,s.Id);
+trigger smsTrigger on Meeting__c (after insert) {
+    
+    for(Meeting__c m:Trigger.new){
+        scheduleClassSMS s=new scheduleClassSMS(m.Id);
+        Datetime executeTime=m.Meeting_Time__c.addMinutes(-10);
+        String cronE=Utility.GetCRONExpression(executeTime);
+        Double random=Math.random();
+        System.schedule('ScheduleJob'+random,cronE,s);
     }
 }

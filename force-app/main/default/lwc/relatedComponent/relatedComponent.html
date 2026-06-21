@@ -1,0 +1,444 @@
+<template>
+    
+     <lightning-layout>
+        <!-- The lightning-layout-item controls the width -->
+        <lightning-layout-item size="5" medium-size="6" large-size="4">
+           <lightning-card  title={objectApiName}>
+            <span class="slds-m-right_small">First Name : {name}</span> 
+            <span>RecordId : {recordId}</span>
+            <hr> 
+             <div class="footer">
+        <lightning-button
+            label="Expand All"
+            variant="base" style="font-size:medium;" onclick={handletoggle} >
+        </lightning-button>
+    </div>
+    </lightning-card>
+        </lightning-layout-item>
+    </lightning-layout>
+
+
+<div class="container"  >
+ <template for:each={datas} for:item="item">  
+   
+     <lightning-accordion allow-multiple-sections-open  active-section-name={activeSections} key={item}>
+        <lightning-accordion-section name={item.objectName} label={item.objectName}>
+            
+           <lightning-card  title={item.objectName} class="slds-p">
+          <lightning-button label="New"  style="font-size:medium;" onclick={handleNew} data-object={item.child} slot="actions" class="slds-m-left_large"> </lightning-button>
+
+         <template for:each={item.records} for:item="item1" >
+            <lightning-button-menu alternative-text="Show menu" key={item1} class="slds-float_right">
+                <lightning-menu-item value="Edit" label="Edit" onclick={handleEdit} data-id={item1.Id} data-name={item.child}></lightning-menu-item>
+                <lightning-menu-item value="Copy" label="Copy" onclick={handleCopy} data-id={item1.Id}></lightning-menu-item>
+            </lightning-button-menu>
+            <p key={item1}>{item.objectName} {item1.serial}</p>
+            <p key={item1}>RecordId : {item1.Id}</p>
+            <br key={item1}> 
+         </template>
+            <hr> 
+             <div class="footer">
+        <lightning-button label="View All" variant="base" style="font-size:medium;" onclick={handleNavigation} data-object={item.child}> </lightning-button>
+    </div>
+    </lightning-card>   
+      
+
+        </lightning-accordion-section>
+    </lightning-accordion>
+</template>
+
+</div>
+</template>
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Ye Normal for:each se Different H
+
+Normally tum likhti ho:
+
+<template for:each={item.records} for:item="rec">
+
+Isme:
+✅ sirf current record milta h.
+
+BUT:
+❌ index nahi milta.
+
+iterator Kya Deta H?
+<template iterator:it={item.records}>
+
+Ye har loop me ek object deta h jiska naam:
+
+it
+
+h.
+
+it ke andar kya kya hota h?
+
+Har iteration me:
+
+it = {
+   value : currentRecord,
+   index : currentIndex,
+   first : true/false,
+   last : true/false
+}
+Example
+
+Suppose:
+
+item.records = [
+   { Id:'101' },
+   { Id:'102' }
+]
+First Iteration
+it = {
+   value : { Id:'101' },
+   index : 0,
+   first : true,
+   last : false
+}
+Second Iteration
+it = {
+   value : { Id:'102' },
+   index : 1,
+   first : false,
+   last : true
+}
+Ab HTML Samjho
+This Line
+Contact {it.index}
+
+Matlab:
+
+Contact 0
+Contact 1
+This Line
+{it.value.Id}
+
+Matlab:
+
+Current record ka Id
+Key Kya H?
+key={it.value.Id}
+
+LWC ko unique identifier chahiye hota h loop me.
+
+To:
+
+first record key = 101
+second key = 102
+Final Visual
+
+Suppose:
+
+records = [
+   { Id:'A1' },
+   { Id:'A2' }
+]
+
+Output:
+
+Contact 0
+RecordId : A1
+
+Contact 1
+RecordId : A2
+Extra Useful Things
+First Record Check
+<template if:true={it.first}>
+Last Record Check
+<template if:true={it.last}>
+
+Useful for:
+
+borders
+spacing
+special styling 🙂
+to ye true and false kya h
+
+Haan 🙂
+first aur last iterator ke special boolean properties hote h.
+
+Boolean means:
+
+true  = yes
+false = no
+Example
+
+Suppose:
+
+records = [
+   { Id:'A1' },
+   { Id:'A2' },
+   { Id:'A3' }
+]
+First Iteration
+it = {
+   index : 0,
+   first : true,
+   last : false
+}
+
+Kyuki:
+✅ ye first record h
+❌ last nahi.
+
+Second Iteration
+it = {
+   index : 1,
+   first : false,
+   last : false
+}
+
+Kyuki:
+❌ first nahi
+❌ last bhi nahi.
+
+Third Iteration
+it = {
+   index : 2,
+   first : false,
+   last : true
+}
+
+Kyuki:
+✅ ye last record h.
+
+Use Kaha Hota?
+Example 1 — First Record Par Heading
+<template if:true={it.first}>
+    <h1>Contacts</h1>
+</template>
+
+Ye sirf first record ke liye chalega.
+
+Example 2 — Last Record Par HR Hide
+<template if:false={it.last}>
+    <hr>
+</template>
+
+Matlab:
+
+last record ke neeche line mat dikhao.
+Final Understanding
+Property	Meaning
+it.first	Current item first h kya
+it.last	Current item last h kya
+true	Haan
+false	Nahi -->
+
+
+
+
+
+
+
+
+<!-- Haan 😄
+data-object HTML ka custom attribute hota h jisse hum hidden/custom data store karte h button ke andar.
+
+Simple Example
+<button data-name="Anjali">
+    Click
+</button>
+
+Yaha:
+
+data-name="Anjali"
+
+button ke andar extra data store kar raha h.
+
+Fir JS Me Kaise Milega?
+handleClick(event){
+
+   console.log(
+      event.target.dataset.name
+   );
+}
+
+Output:
+
+Anjali
+Salesforce/LWC Me Same Concept
+
+Tumhara button:
+
+<lightning-button
+    data-object={item.objectName}>
+</lightning-button>
+
+Suppose:
+
+item.objectName = 'Contact'
+
+To actual HTML internally kuch esa banega:
+
+<button data-object="Contact">
+Fir JS Me
+event.target.dataset.object
+
+Matlab:
+
+button ke andar jo data-object h
+uski value lao
+dataset Kya H?
+
+Browser automatically:
+
+saare data-*
+attributes ko:
+dataset
+
+object me convert kar deta h.
+
+Example
+
+HTML:
+
+<button
+   data-name="Anjali"
+   data-city="Jaipur">
+</button>
+
+JS:
+
+event.target.dataset.name
+
+→ "Anjali"
+
+event.target.dataset.city
+
+→ "Jaipur"
+
+Tumhare Case Me
+data-object={item.objectName}
+
+store kar raha:
+
+Current object ka name
+
+Then click par:
+
+event.target.dataset.object
+
+se mil jayega 🙂
+
+nii ye chiz h kya data-name and inhe aise access kse kr pari hu
+
+Achaaa 😄
+Tum ye puch ri ho ki:
+
+data-name
+data-object
+
+actual me h kya aur browser inhe access kaise kar leta h.
+
+Ye HTML5 Feature H
+
+HTML me ek special concept hota h:
+
+Custom Data Attributes
+
+Jo:
+
+data-
+
+se start hote h.
+
+Example
+<div
+   data-name="Anjali"
+   data-city="Jaipur">
+</div>
+
+Ye valid HTML h 🙂
+
+Browser khud allow karta h custom data store karna using:
+
+data-*
+Why Banaya Gaya?
+
+Taaki:
+
+HTML element ke saath
+extra custom info attach kar sakein
+
+WITHOUT:
+❌ creating variables
+❌ hidden inputs
+
+Browser Internally Kya Karta H?
+
+Ye:
+
+data-name="Anjali"
+
+ko internally save kar deta h.
+
+Fir JS me browser automatically:
+
+dataset
+
+object provide karta h.
+
+Example
+
+HTML:
+
+<button
+   data-name="Anjali"
+   data-city="Jaipur">
+</button>
+JS
+event.target.dataset
+
+Output:
+
+{
+   name: 'Anjali',
+   city: 'Jaipur'
+}
+
+🙂
+
+Isliye Ye Kaam Karta H
+event.target.dataset.name
+
+Browser bolta:
+
+button ke data-name attribute ki value dedo
+Tumhare Case Me
+data-object={item.objectName}
+
+means:
+
+button ke andar current object name store kar do
+
+Then:
+
+event.target.dataset.object
+
+→ us stored value ko read kar leta h.
+
+Simple Analogy 😄
+
+Suppose button ek bag h.
+
+data-object="Contact"
+
+means:
+👉 bag ke andar "Contact" paper daal diya.
+
+Then JS:
+
+dataset.object -->

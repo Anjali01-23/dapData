@@ -1,0 +1,28 @@
+<template>
+  <lightning-combobox
+    options={picklistOptions}
+    onchange={handlePicklistChange}
+  >
+  </lightning-combobox>
+
+  <template for:each={arrayLabelId} for:item="item1">
+    <lightning-pill
+      label={item1.label}
+      key={item1.value}
+      onremove={removeMethod}
+      data-names={item1.label}
+      data-id={item1.value}    
+    ></lightning-pill>
+  </template>
+
+  <br><br>
+  <lightning-datatable
+    key-field="Id"
+    data={datas}
+    columns={columns}
+    onrowaction={callRowAction}
+    show-row-number-column
+    hide-checkbox-column
+  >
+  </lightning-datatable>
+</template>

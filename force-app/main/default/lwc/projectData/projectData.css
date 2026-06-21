@@ -1,0 +1,13 @@
+.container{
+    display:flex;
+    flex-wrap:wrap;
+    gap:20px;
+
+}
+
+.c1{
+     width: 200px;
+    --slds-c-card-sizing-min-height: 400px;
+    --slds-c-card-sizing-max-height: 400px;
+}
+

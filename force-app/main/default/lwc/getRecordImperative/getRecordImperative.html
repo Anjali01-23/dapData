@@ -1,5 +1,5 @@
 <template>
-    <lightning-input type="text" label="Input" class="slds-m-left_x-small accountt" onchange={handle}></lightning-input>
+    <lightning-input type="text" label="Input" class="slds-m-left_x-small accountt" onchange={handle} ></lightning-input>
     <!-- <lightning-button type="text" label="Call Imperative" class="slds-m-left_x-small" onclick={handle}></lightning-button> -->
     <template for:each={accounts} for:item="record">
     <p key={record.Id}>{record.Id}-->{record.Name}</p>

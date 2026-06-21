@@ -69,15 +69,15 @@ public with sharing class getRecordsImperative {
       return [Select Name,Email,Account.Name,LeadSource from Contact] ;
     }
 
-    @AuraEnabled(cacheable=true)
+    /*@AuraEnabled(cacheable=true)
     public static List<Document__c> getDocument() {
       return [Select Name, isActive__c,Valid_from_Date__c,Valid_To_Date__c,	Document_Type__c from Document__c] ;
-    }
+    } */
 
-    @AuraEnabled
+   /* @AuraEnabled
     public static List<Document__c> getDocumentYear(List<Integer>years) {
       return [Select Name, isActive__c,Valid_from_Date__c,Valid_To_Date__c,	Document_Type__c from Document__c Where CALENDAR_YEAR(Valid_from_Date__c) IN :years] ;
-    }
+    } */
 
     @AuraEnabled(cacheable=true)
     public static List<Account> getAcc() {

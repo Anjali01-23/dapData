@@ -1,0 +1,16 @@
+.c1{
+    color:white;
+    background-color: blue;
+    width: 300px;
+    border-radius: 20px;
+}
+
+.c2{
+    display: grid;
+    place-items: center;
+}
+
+.c3{
+   color:white;
+    background-color: blue; 
+}

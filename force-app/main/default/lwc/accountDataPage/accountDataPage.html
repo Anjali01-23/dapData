@@ -1,0 +1,257 @@
+<template>
+    <template lwc:if={accData}>
+        <div>
+            <h1 class="a1">{accData.Name}</h1>
+
+            <div class="container">
+                <div class="con1">{accData.Type__c}</div>
+              <div class="con1">{accData.Subtype__c}</div>  
+          <lightning-button-icon icon-name="utility:edit" alternative-text="Edit!" title="Edit" size="xx-small" onclick={typeChange}></lightning-button-icon>
+
+            </div>
+
+            <p>Last Updated : {accData.LastModifiedDate}</p>
+        </div>
+</br>
+</br>
+
+<lightning-layout>
+        <lightning-layout-item size="5" medium-size="6" large-size="4">
+           <lightning-card >
+        <h1 class="a1">Personal Information</h1>
+      </br>
+        <div class="container">
+                <div>
+                   <p> Name:</p>
+                   <div class="container">
+                   <p> {accData.Name}</p>        
+          <lightning-button-icon icon-name="utility:edit" alternative-text="Edit!" title="Edit" size="xx-small" data-val="Name" onclick={typeChange1}></lightning-button-icon>
+</div>
+
+                </div>
+              <div>
+               <p>Phone:</p> 
+               <div class="container">
+               <p>{accData.Phone}</p>         
+          <lightning-button-icon icon-name="utility:edit" alternative-text="Edit!" title="Edit" size="xx-small" data-val="Phone" onclick={typeChange1}></lightning-button-icon>
+</div>
+              </div>  
+              <div>
+               <p>Email:</p> 
+               <div class="container">
+               <p> {accData.Email__c}</p>        
+          <lightning-button-icon icon-name="utility:edit" alternative-text="Edit!" title="Edit" size="xx-small" data-val="Email__c" onclick={typeChange1}></lightning-button-icon>
+</div>
+              </div>  
+        </div>
+    </br>
+        <div class="container">
+                <div>
+                    <p>Account Number:</p>
+                    <div class="container">
+                    <p>{accData.AccountNumber}</p>        
+          <lightning-button-icon icon-name="utility:edit" alternative-text="Edit!" title="Edit" size="xx-small" data-val="AccountNumber" onclick={typeChange1}></lightning-button-icon>
+</div>
+                </div>
+
+              <div>
+                <p>Website:</p>
+                <div class="container">
+                <p>{accData.Website}</p>        
+          <lightning-button-icon icon-name="utility:edit" alternative-text="Edit!" title="Edit" size="xx-small" data-val="Website" onclick={typeChange1}></lightning-button-icon>
+</div>
+              </div>  
+
+              <div>
+               <p>Annual Revenue:</p> 
+               <div class="container">
+               <p>{accData.AnnualRevenue}</p>         
+          <lightning-button-icon icon-name="utility:edit" alternative-text="Edit!" title="Edit" size="xx-small" data-val="AnnualRevenue" onclick={typeChange1}></lightning-button-icon>
+</div>
+              </div>
+              <div>
+                <p>SLA Expiration Date:</p> 
+                <div class="container">
+               <p>{accData.SLAExpirationDate__c}</p>         
+          <lightning-button-icon icon-name="utility:edit" alternative-text="Edit!" title="Edit" size="xx-small" data-val="SLAExpirationDate__c" onclick={typeChange1}></lightning-button-icon>
+</div>
+              </div>  
+        </div>
+
+      </lightning-card>
+        </lightning-layout-item>
+    </lightning-layout>
+
+
+</br>
+</br>
+
+
+    <lightning-layout>
+        <lightning-layout-item size="5" medium-size="6" large-size="4">
+           <lightning-card >
+        <h1 class="a1">Other Information</h1>
+      </br>
+        <div class="container">
+                <div>
+                   <p> Billing Street:</p>
+                   <div class="container">
+                   <p> {accData.BillingStreet}</p>        
+          <lightning-button-icon icon-name="utility:edit" alternative-text="Edit!" title="Edit" size="xx-small" data-val="BillingStreet" onclick={typeChange1}></lightning-button-icon>
+</div>
+                </div>
+              <div>
+               <p>Billing City:</p> 
+               <div class="container">
+               <p>{accData.BillingCity}</p>         
+          <lightning-button-icon icon-name="utility:edit" alternative-text="Edit!" title="Edit" size="xx-small" data-val="BillingCity" onclick={typeChange1}></lightning-button-icon>
+</div>
+              </div>  
+              <div>
+               <p>Billing Country:</p> 
+               <div class="container">
+               <p> {accData.BillingCountry}</p>        
+          <lightning-button-icon icon-name="utility:edit" alternative-text="Edit!" title="Edit" size="xx-small" data-val="BillingCountry" onclick={typeChange1}></lightning-button-icon>
+</div>
+              </div>  
+        </div>
+    </br>
+        <div class="container">
+                <div>
+                    <p>Shipping Street:</p>
+                    <div class="container">
+                    <p>{accData.ShippingStreet}</p>        
+          <lightning-button-icon icon-name="utility:edit" alternative-text="Edit!" title="Edit" size="xx-small" data-val="ShippingStreet" onclick={typeChange1}></lightning-button-icon>
+</div>
+                </div>
+
+              <div>
+                <p>Shipping City:</p>
+                    <div class="container">
+
+                <p>{accData.ShippingCity}</p>        
+          <lightning-button-icon icon-name="utility:edit" alternative-text="Edit!" title="Edit" size="xx-small" data-val="ShippingCity" onclick={typeChange1}></lightning-button-icon>
+
+              </div>  
+ </div>  
+              <div>
+               <p>ShippingCountry:</p> 
+                    <div class="container">
+
+               <p>{accData.ShippingCountry}</p>         
+          <lightning-button-icon icon-name="utility:edit" alternative-text="Edit!" title="Edit" size="xx-small" data-val="ShippingCountry" onclick={typeChange1}></lightning-button-icon>
+
+              </div>
+    </div>
+        </div>
+
+      </lightning-card>
+        </lightning-layout-item>
+    </lightning-layout>
+
+    <br>
+  <br>
+
+  <lightning-layout>
+        <lightning-layout-item size="5" medium-size="6" large-size="4">
+           <lightning-card title="Appointments">
+            <template for:each={data1} for:item="item">
+            <p key={item}>{item.Appointment_Type__c}</p>
+            <br key={item}>
+            <p key={item}>{item.CreatedDate}</p>
+             <hr key={item}>       
+            </template>
+            <template lwc:if={value}>
+            <lightning-button
+            label="View All"
+            variant="base"  onclick={viewAll} >
+        </lightning-button>
+            </template>
+            <template lwc:else>
+            <lightning-button
+            label="Hide All"
+            variant="base"  onclick={hideAll} >
+        </lightning-button>
+            </template>
+         </lightning-card>
+        </lightning-layout-item>
+    </lightning-layout>
+     
+    </template>
+
+
+
+
+
+
+    <template if:true={istype}>
+     <section class="slds-modal slds-fade-in-open">
+      <div class="slds-modal__container">
+        <header class="slds-modal__header">
+          <h2 class="slds-text-heading_medium">Update Type Of Account</h2>
+          <button class="slds-modal__close btn" onclick={closeModaledit} >
+            <lightning-icon
+        icon-name="utility:close"
+        alternative-text="Close"
+        size="small"
+        class="iconC"
+    ></lightning-icon>
+    
+          </button>
+        </header>
+
+        
+        <div class="slds-modal__content slds-p-around_medium">
+      <lightning-record-edit-form object-api-name="Account" record-id={recordId} onsuccess={handleSuccess}>
+      
+       
+        <lightning-input-field field-name="Type__c"></lightning-input-field>
+        <lightning-input-field field-name="Subtype__c"></lightning-input-field>
+        
+       
+        
+      
+        
+      
+        <lightning-button type="submit" label="Save"></lightning-button>
+      </lightning-record-edit-form>
+        </div>
+      </div>
+     </section>
+     <div class="slds-backdrop slds-backdrop_open">
+      </div>
+    </template>
+
+
+    <template if:true={istype1}>
+     <section class="slds-modal slds-fade-in-open" onclick={saveData}>
+      <div class="slds-modal__container" onclick={stopPropagation}>
+        <header class="slds-modal__header">
+          <h2 class="slds-text-heading_medium">Update Account</h2>
+          <button class="slds-modal__close btn" onclick={closeModaledit1}>
+            <lightning-icon
+        icon-name="utility:close"
+        alternative-text="Close"
+        size="small"
+        class="iconC"
+    ></lightning-icon>
+    
+          </button>
+        </header>
+
+        
+        <div class="slds-modal__content slds-p-around_medium">
+      <lightning-record-edit-form object-api-name="Account" record-id={recordId} onsuccess={handleSuccess1} class="editform">
+      
+        <lightning-input-field field-name={fields}></lightning-input-field>
+        <lightning-button type="submit" label="Save"></lightning-button>
+        
+      </lightning-record-edit-form>
+        </div>
+      </div>
+     </section>
+     <div class="slds-backdrop slds-backdrop_open" >
+      </div>
+    </template>
+    
+</template>

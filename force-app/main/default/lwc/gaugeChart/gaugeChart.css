@@ -1,0 +1,26 @@
+.chartWrapper{
+    position:relative;
+    height:250px;
+}
+
+.centerText{
+
+    position:absolute;
+
+    top:60%;
+    left:50%;
+
+    transform:
+        translate(-50%,-50%);
+
+    text-align:center;
+}
+
+.percentage{
+    font-size:32px;
+    font-weight:bold;
+}
+
+.status{
+    color:gray;
+}

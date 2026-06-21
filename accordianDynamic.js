@@ -3,7 +3,6 @@
 
 
         <div class="slds-text-align_right">
-            <lightning-button label="New" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
         </div>
         <div class="slds-grid slds-wrap">
             <div class="slds-col slds-size_12-of-12 slds-p-around_medium">
