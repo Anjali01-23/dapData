@@ -2548,5 +2548,350 @@ This is called a Design Attribute or Component Property in XML and is frequently
 // One-line interview answer
 
 // To store previous data in LWC, I use localStorage. I save the value using localStorage.setItem() and retrieve it in connectedCallback() using localStorage.getItem(), so when the component opens again, the previous data is displayed automatically.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+There are 3 ways to show icons in lightning-datatable.
+
+1. Icon inside a cell using cellAttributes.iconName
+
+Example:
+
+{
+    label: 'Revenue',
+    fieldName: 'AnnualRevenue',
+    type: 'currency',
+    cellAttributes: {
+        iconName: { fieldName: 'iconName' },
+        iconPosition: 'right'
+    }
+}
+
+Prepare data:
+
+this.data = result.map(row => {
+    return {
+        ...row,
+        iconName:
+            row.AnnualRevenue > 1000000
+                ? 'utility:up'
+                : 'utility:down'
+    };
+});
+
+Result:
+
+1000000 ↑
+50000 ↓
+2. Icon column only
+{
+    label: 'Status',
+    fieldName: 'statusIcon',
+    type: 'icon',
+    typeAttributes: {
+        iconName: {
+            fieldName: 'statusIcon'
+        }
+    }
+}
+
+Data:
+
+statusIcon:
+row.Status__c === 'Confirmed'
+? 'utility:success'
+: 'utility:error'
+3. Dynamic icons with colors
+
+Columns:
+
+{
+    label: 'Status',
+    fieldName: 'Status__c',
+    cellAttributes: {
+        iconName: { fieldName: 'statusIcon' },
+        iconPosition: 'left',
+        class: { fieldName: 'statusClass' }
+    }
+}
+
+Data:
+
+this.data = result.map(row => {
+
+    let statusIcon;
+    let statusClass;
+
+    if (row.Status__c === 'Confirmed') {
+        statusIcon = 'utility:success';
+        statusClass = 'slds-text-color_success';
+    }
+    else if (row.Status__c === 'Canceled') {
+        statusIcon = 'utility:error';
+        statusClass = 'slds-text-color_error';
+    }
+    else if (row.Status__c === 'Pending') {
+        statusIcon = 'utility:warning';
+        statusClass = 'slds-text-color_warning';
+    }
+    else {
+        statusIcon = 'utility:info';
+        statusClass = 'slds-text-color_default';
+    }
+
+    return {
+        ...row,
+        statusIcon,
+        statusClass
+    };
+});
+
+Result:
+
+✔ Confirmed
+✖ Canceled
+⚠ Pending
+ⓘ Released
+4. Action Button with Icon
+{
+    type: 'button-icon',
+    typeAttributes: {
+        iconName: 'utility:preview',
+        name: 'view',
+        variant: 'border-filled'
+    }
+}
+5. Custom Datatable Icon
+
+If using a custom datatype:
+
+<lightning-icon
+    icon-name={typeAttributes.iconName}
+    size="small">
+</lightning-icon>
+Most common interview question:
+
+Show green tick for confirmed and red cross for canceled
+
+statusIcon:
+row.Status__c === 'Confirmed'
+? 'utility:success'
+: 'utility:error'
+
+with
+
+cellAttributes: {
+    iconName: { fieldName: 'statusIcon' }
+}
+
+This is the pattern most companies expect in LWC datatable questions.
+
+{
+    label: 'Revenue',
+    fieldName: 'AnnualRevenue',
+    type: 'currency',
+    cellAttributes: {
+        iconName: { fieldName: 'iconName' },
+        iconPosition: 'right'
+    }
+}WHAT IS THE DIFF IN BOTH 
+
+You're asking the difference between these two:
+
+iconName: { fieldName: 'iconName' }
+
+and
+
+iconPosition: 'right'
+
+They do completely different things.
+
+1. iconName
+
+This decides WHICH icon to show.
+
+Example:
+
+iconName: { fieldName: 'iconName' }
+
+Data:
+
+[
+ {
+   Name: 'ABC',
+   iconName: 'utility:up'
+ },
+ {
+   Name: 'XYZ',
+   iconName: 'utility:down'
+ }
+]
+
+Result:
+
+ABC    ↑
+XYZ    ↓
+
+You can even show different icons for different rows.
+
+Static icon
+iconName: 'utility:success'
+
+Every row will show:
+
+✔
+✔
+✔
+2. iconPosition
+
+This decides WHERE the icon appears.
+
+iconPosition: 'right'
+
+Result:
+
+1000 ↑
+iconPosition: 'left'
+
+Result:
+
+↑ 1000
+Together
+cellAttributes: {
+    iconName: { fieldName: 'iconName' },
+    iconPosition: 'right'
+}
+
+means:
+
+Get the icon from the iconName field.
+Display it on the right side of the value.
+Example
+{
+    label:'Status',
+    fieldName:'Status__c',
+    cellAttributes:{
+        iconName:{fieldName:'statusIcon'},
+        iconPosition:'left'
+    }
+}
+
+Data:
+
+statusIcon =
+    row.Status__c === 'Confirmed'
+    ? 'utility:success'
+    : 'utility:error';
+
+Result:
+
+✔ Confirmed
+✖ Canceled
+Interview Answer
+Property	Purpose
+iconName	Which icon to display
+iconPosition	Where to display the icon (left/right)
+
+They are independent properties:
+
+iconName → WHAT icon
+iconPosition → WHERE icon
+NO GIVING ICON IN CELL OR TYPE
+
+Ahh, you're asking the difference between:
+
+type: 'icon'
+
+and
+
+cellAttributes: {
+    iconName: ...
+}
+
+These are different.
+
+1. type: 'icon'
+
+This creates an entire icon column.
+
+{
+    label: 'Status',
+    fieldName: 'statusIcon',
+    type: 'icon',
+    typeAttributes: {
+        iconName: {
+            fieldName: 'statusIcon'
+        }
+    }
+}
+
+Result:
+
+Status
+✔
+✖
+⚠
+
+Only the icon is shown. No text.
+
+2. cellAttributes.iconName
+
+This adds an icon inside another cell.
+
+{
+    label: 'Revenue',
+    fieldName: 'AnnualRevenue',
+    type: 'currency',
+    cellAttributes: {
+        iconName: {
+            fieldName: 'iconName'
+        }
+    }
+}
+
+Result:
+
+Revenue
+10000 ↑
+5000 ↓
+
+The value (10000) is still displayed, and the icon is added next to it.
+
+Example
+type: 'icon'
+✔
+✖
+⚠
+cellAttributes.iconName
+✔ Confirmed
+✖ Canceled
+⚠ Pending
+
+or
+
+1000 ↑
+500 ↓
+Interview Answer
+Property	Result
+type: 'icon'	Entire cell contains only an icon
+cellAttributes.iconName	Icon is displayed along with the field value
+
+Use:
+
+type: 'icon' → when you want a dedicated icon column.
+cellAttributes.iconName → when you want the icon beside text, currency, number, etc.
 }
 }
