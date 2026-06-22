@@ -92,3 +92,53 @@ buildTree(data) {
     return mainData;
 }
 }
+
+
+
+
+// import { LightningElement, wire } from 'lwc';
+// import getAccountHierarchy
+//     from '@salesforce/apex/AccountHierarchyController.getAccountHierarchy';
+
+// const columns = [
+//     { label: 'Account Name', fieldName: 'Name' },
+//     { label: 'Type', fieldName: 'Type' }
+// ];
+
+// export default class AccountTreeGrid extends LightningElement {
+//     columns = columns;
+//     gridData = [];
+
+//     @wire(getAccountHierarchy)
+//     wiredAccounts({ data, error }) {
+//         if (data) {
+//             this.gridData = this.buildTree(data);
+//         } else if (error) {
+//             console.error(error);
+//         }
+//     }
+
+//     buildTree(data, parentId = null) {
+//         let result = [];
+
+//         data
+//             .filter(acc => acc.ParentId === parentId)
+//             .forEach(acc => {
+//                 let children = this.buildTree(data, acc.Id);
+
+//                 let row = {
+//                     Id: acc.Id,
+//                     Name: acc.Name,
+//                     Type: acc.Type
+//                 };
+
+//                 if (children.length > 0) {
+//                     row._children = children;
+//                 }
+
+//                 result.push(row);
+//             });
+
+//         return result;
+//     }
+// }

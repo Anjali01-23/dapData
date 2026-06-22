@@ -1797,5 +1797,756 @@ public with sharing class learnClass {
 // sf alias <command>: Manage org aliases
 
 // sf config <command>: Configure CLI settings
+
+
+
+
+
+
+
+
+//Error in UI
+// Yes. In LWC, you usually store the error message in a variable and then use if:true in the template.
+
+// JS
+// import { LightningElement } from 'lwc';
+// import getAccounts from '@salesforce/apex/AccountController.getAccounts';
+
+// export default class Demo extends LightningElement {
+//     accounts;
+//     errorMessage;
+
+//     connectedCallback() {
+//         getAccounts()
+//             .then(result => {
+//                 this.accounts = result;
+//                 this.errorMessage = '';
+//             })
+//             .catch(error => {
+//                 this.accounts = null;
+//                 this.errorMessage =
+//                     error.body?.message || 'Something went wrong';
+//             });
+//     }
+// }
+// HTML
+// <template>
+//     <template if:true={errorMessage}>
+//         <div class="slds-text-color_error">
+//             {errorMessage}
+//         </div>
+//     </template>
+
+//     <template if:false={errorMessage}>
+//         <lightning-datatable
+//             data={accounts}
+//             columns={columns}>
+//         </lightning-datatable>
+//     </template>
+// </template>
+// Another way (recommended)
+
+// JS:
+
+// error;
+// .catch(error => {
+//     this.error = error;
+// });
+
+// HTML:
+
+// <template if:true={error}>
+//     <p class="slds-text-color_error">
+//         {error.body.message}
+//     </p>
+// </template>
+
+// <template if:false={error}>
+//     <!-- Your actual UI -->
+// </template>
+// Multiple errors
+// <template if:true={error}>
+//     <template for:each={error.body} for:item="err">
+//         <p key={err.message} class="slds-text-color_error">
+//             {err.message}
+//         </p>
+//     </template>
+// </template>
+// Example with custom message
+// if (!this.trainId) {
+//     this.errorMessage = 'Please select a train first.';
+//     return;
+// }
+// this.errorMessage = '';
+// <template if:true={errorMessage}>
+//     <div class="slds-box slds-theme_error">
+//         {errorMessage}
+//     </div>
+// </template>
+
+
+
+
+Real-Life Example
+
+Suppose you create a reusable Card component.
+
+Instead of hardcoding the content:
+
+<div class="card">
+    Welcome User
+</div>
+
+you want different pages to put different content inside the card.
+
+That's where slots help.
+
+Without Slot
+
+Child Component:
+
+<template>
+    <div class="card">
+        Welcome User
+    </div>
+</template>
+
+Output is always:
+
+Welcome User
+
+No flexibility.
+
+With Slot
+
+Child Component (card.html)
+
+<template>
+    <div class="card">
+        <slot></slot>
+    </div>
+</template>
+
+Here:
+
+<slot></slot>
+
+means:
+
+"Parent, whatever content you provide, I'll display it here."
+
+Parent Component:
+
+<c-card>
+    <h1>Account Details</h1>
+</c-card>
+
+Output:
+
+------------------
+| Account Details |
+------------------
+
+The <h1> comes from the parent and is inserted into the child's slot.
+
+Another Example
+
+Child:
+
+<template>
+    <div class="card">
+        <slot></slot>
+    </div>
+</template>
+
+Parent 1:
+
+<c-card>
+    <p>Employee Information</p>
+</c-card>
+
+Output:
+
+Employee Information
+
+Parent 2:
+
+<c-card>
+    <lightning-button label="Save">
+    </lightning-button>
+</c-card>
+
+Output:
+
+[ Save ]
+
+Same child component, different content.
+
+Named Slots
+
+Suppose you want:
+
+---------------------
+| Header            |
+---------------------
+| Body              |
+---------------------
+| Footer            |
+---------------------
+
+Child:
+
+<template>
+
+    <div class="header">
+        <slot name="header"></slot>
+    </div>
+
+    <div class="body">
+        <slot name="body"></slot>
+    </div>
+
+    <div class="footer">
+        <slot name="footer"></slot>
+    </div>
+
+</template>
+
+Parent:
+
+<c-card>
+
+    <h1 slot="header">
+        Account Details
+    </h1>
+
+    <p slot="body">
+        Account Information Here
+    </p>
+
+    <lightning-button
+        slot="footer"
+        label="Save">
+    </lightning-button>
+
+</c-card>
+
+Output:
+
+--------------------
+Account Details
+--------------------
+Account Information Here
+--------------------
+[Save]
+--------------------
+
+Each piece goes into its matching slot.
+
+Default Slot Content
+
+Child:
+
+<slot>
+    No Data Available
+</slot>
+
+If parent sends nothing:
+
+<c-card></c-card>
+
+Output:
+
+No Data Available
+
+If parent sends something:
+
+<c-card>
+    Employee Data
+</c-card>
+
+Output:
+
+Employee Data
+
+The parent's content replaces the default content.
+
+Interview Answer (Short)
+
+//Client side searching
+
+HTML
+<lightning-input
+    type="search"
+    label="Search"
+    onchange={handleSearch}>
+</lightning-input>
+
+<lightning-datatable
+    key-field="Id"
+    data={filteredData}
+    columns={columns}>
+</lightning-datatable>
+JS
+import { LightningElement, track } from 'lwc';
+import getAccounts from '@salesforce/apex/AccountController.getAccounts';
+
+export default class DatatableSearch extends LightningElement {
+    columns = [
+        { label: 'Name', fieldName: 'Name' },
+        { label: 'Phone', fieldName: 'Phone' },
+        { label: 'Industry', fieldName: 'Industry' }
+    ];
+
+    @track data = [];
+    @track filteredData = [];
+
+    connectedCallback() {
+        getAccounts()
+            .then(result => {
+                this.data = result;
+                this.filteredData = [...result];
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    handleSearch(event) {
+        const searchKey = event.target.value.toLowerCase();
+
+        this.filteredData = this.data.filter(record => {
+            return (
+                (record.Name &&
+                    record.Name.toLowerCase().includes(searchKey)) ||
+                (record.Phone &&
+                    record.Phone.toLowerCase().includes(searchKey)) ||
+                (record.Industry &&
+                    record.Industry.toLowerCase().includes(searchKey))
+            );
+        });
+    }
+}
+Dynamic Search (all columns)
+
+If you don't want to mention every field:
+
+handleSearch(event) {
+    const searchKey = event.target.value.toLowerCase();
+
+    this.filteredData = this.data.filter(record => {
+        return Object.values(record)
+            .join(' ')
+            .toLowerCase()
+            .includes(searchKey);
+    });
+}
+Search as user types
+
+Use onkeyup instead of onchange.
+
+<lightning-input
+    type="search"
+    label="Search"
+    onkeyup={handleSearch}>
+</lightning-input>
+Interview Answer
+
+Client-side searching is used when the dataset is small or already loaded in the browser. We keep an original copy of the data and use JavaScript's filter() method to display matching records without making additional Apex calls, improving performance and reducing server trips.
+
+
+
+
+
+Refresh Apex
+https://salesforcegeek.in/refreshapex-in-lwc/ 
+
+Datatable
+https://developer.salesforce.com/docs/platform/lightning-component-reference/guide/lightning-datatable.html?type=Example
+
+Navigation
+https://www.apexhours.com/navigation-service-in-lightning-web-components/
+
+
+parent-->chils and vice-versa 
+https://shreyventure.hashnode.dev/parent-to-child-and-child-to-parent-communication-in-lwc
+
+
+//Mass records
+In LWC, mass select records means selecting multiple rows at the same time in a lightning-datatable using checkboxes so that you can perform actions like:
+
+Delete multiple records
+Update multiple records
+Send emails to multiple records
+Export selected records
+Datatable with Mass Selection
+HTML
+<template>
+    <lightning-button
+        label="Delete Selected"
+        onclick={handleDelete}>
+    </lightning-button>
+
+    <lightning-datatable
+        key-field="Id"
+        data={data}
+        columns={columns}
+        onrowselection={handleRowSelection}>
+    </lightning-datatable>
+</template>
+JS
+import { LightningElement, track } from 'lwc';
+
+export default class AccountTable extends LightningElement {
+    columns = [
+        { label: 'Name', fieldName: 'Name' },
+        { label: 'Phone', fieldName: 'Phone' }
+    ];
+
+    @track data = [];
+    selectedRows = [];
+
+    handleRowSelection(event) {
+        this.selectedRows = event.detail.selectedRows;
+        console.log(this.selectedRows);
+    }
+
+    handleDelete() {
+        const ids = this.selectedRows.map(
+            row => row.Id
+        );
+
+        console.log('Selected Ids', ids);
+
+        // Call Apex here
+    }
+}
+If you only need IDs
+handleRowSelection(event) {
+    this.selectedIds =
+        event.detail.selectedRows.map(
+            row => row.Id
+        );
+}
+Pass selected records to Apex
+JS
+deleteAccounts({
+    accountIds: this.selectedIds
+});
+Apex
+@AuraEnabled
+public static void deleteAccounts(List<Id> accountIds) {
+    delete [
+        SELECT Id
+        FROM Account
+        WHERE Id IN :accountIds
+    ];
+}
+Limit number of selections
+<lightning-datatable
+    max-row-selection="3"
+    ...
+></lightning-datatable>
+
+Only 3 records can be selected.
+
+Get selected rows using querySelector
+const selectedRows =
+    this.template
+        .querySelector('lightning-datatable')
+        .getSelectedRows();
+
+
+//type:- url
+import { LightningElement, wire } from 'lwc';
+import getContacts from '@salesforce/apex/ContactController.getContacts';
+
+const columns = [
+    {
+        label: 'Contact Name',
+        fieldName: 'contactUrl',
+        type: 'url',
+        typeAttributes: {
+            label: { fieldName: 'Name' },
+            target: '_blank'
+        }
+    },
+    {
+        label: 'Account',
+        fieldName: 'accountUrl',
+        type: 'url',
+        typeAttributes: {
+            label: { fieldName: 'AccountName' },
+            target: '_blank'
+        }
+    },
+    {
+        label: 'Email',
+        fieldName: 'Email'
+    }
+];
+
+export default class ContactTable extends LightningElement {
+    columns = columns;
+    data = [];
+
+    @wire(getContacts)
+    wiredContacts({ data, error }) {
+        if (data) {
+            this.data = data.map(row => {
+                return {
+                    ...row,
+                    contactUrl: '/' + row.Id,
+                    accountUrl: row.AccountId
+                        ? '/' + row.AccountId
+                        : '',
+                    AccountName: row.Account
+                        ? row.Account.Name
+                        : ''
+                };
+            });
+        }
+    }
+}
+
+//Platform event link
+https://docs.google.com/document/d/1x7Epnx18GNIrhhuT-N_E3Vm91WZuEyH_kjMTRh0c3ig/edit?tab=t.0
+
+
+        //Picklist from targetconfig
+        // https://docs.google.com/document/d/1BWSwZssFQiiVxMEJDsvSjcHuwd6aimkNn1qpfoRmY7E/edit?tab=t.0
+
+        myComponent.js-meta.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>58.0</apiVersion>
+    <isExposed>true</isExposed>
+
+    <targets>
+        <!-- Where the component can be used -->
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__HomePage</target>
+    </targets>
+
+    <!-- Take input in LWC component -->
+    <targetConfigs>
+        <targetConfig targets="lightning__AppPage,lightning__RecordPage,lightning__HomePage">
+
+            <!-- Creates an input field in App Builder -->
+            <property
+                name="myTitle"
+                type="String"
+                label="Enter Component Title"
+                description="Text shown at the top" />
+
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>
+
+
+
+2. myComponent.js
+import { LightningElement, api } from 'lwc';
+
+export default class MyComponent extends LightningElement {
+    @api myTitle; // Use variable wherever you want
+}
+
+
+
+3. myComponent.html
+<template>
+    <lightning-card title={myTitle}>
+        <p>Hello, the title above came from the XML config!</p>
+    </lightning-card>
+</template>
+
+
+How it works
+Add the component to an App Page, Home Page, or Record Page.
+In Lightning App Builder, you'll see a property:
+Enter Component Title
+Whatever value you enter there (for example, "Project Dashboard"), it gets assigned to:
+@api myTitle;
+The card title becomes:
+Project Dashboard
+
+This is called a Design Attribute or Component Property in XML and is frequently asked in LWC interviews.
+
+
+
+
+
+
+
+//Inline editing
+
+// Here's the complete Inline Editing in lightning-datatable example.
+
+// Apex
+// public with sharing class AccountController {
+
+//     @AuraEnabled(cacheable=true)
+//     public static List<Account> getAccounts() {
+//         return [
+//             SELECT Id,
+//                    Name,
+//                    Phone,
+//                    Industry
+//             FROM Account
+//             LIMIT 100
+//         ];
+//     }
+
+//     @AuraEnabled
+//     public static void updateAccounts(List<Account> accounts) {
+//         update accounts;
+//     }
+// }
+// HTML
+// <template>
+//     <lightning-card title="Inline Editing">
+
+//         <lightning-datatable
+//             key-field="Id"
+//             data={data}
+//             columns={columns}
+//             draft-values={draftValues}
+//             onsave={handleSave}>
+//         </lightning-datatable>
+
+//     </lightning-card>
+// </template>
+// JS
+// import { LightningElement, wire, track } from 'lwc';
+// import getAccounts from '@salesforce/apex/AccountController.getAccounts';
+// import updateAccounts from '@salesforce/apex/AccountController.updateAccounts';
+// import { refreshApex } from '@salesforce/apex';
+// import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+
+// const COLUMNS = [
+//     {
+//         label: 'Name',
+//         fieldName: 'Name',
+//         editable: true
+//     },
+//     {
+//         label: 'Phone',
+//         fieldName: 'Phone',
+//         type: 'phone',
+//         editable: true
+//     },
+//     {
+//         label: 'Industry',
+//         fieldName: 'Industry',
+//         editable: true
+//     }
+// ];
+
+// export default class InlineEditDemo extends LightningElement {
+//     columns = COLUMNS;
+//     data = [];
+//     draftValues = [];
+
+//     wiredResult;
+
+//     @wire(getAccounts)
+//     wiredAccounts(result) {
+//         this.wiredResult = result;
+
+//         if (result.data) {
+//             this.data = result.data;
+//         }
+//     }
+
+//     async handleSave(event) {
+//         const updatedFields = event.detail.draftValues;
+
+//         try {
+//             await updateAccounts({
+//                 accounts: updatedFields
+//             });
+
+//             this.dispatchEvent(
+//                 new ShowToastEvent({
+//                     title: 'Success',
+//                     message: 'Records Updated',
+//                     variant: 'success'
+//                 })
+//             );
+
+//             this.draftValues = [];
+
+//             await refreshApex(this.wiredResult);
+//         }
+//         catch (error) {
+//             this.dispatchEvent(
+//                 new ShowToastEvent({
+//                     title: 'Error',
+//                     message: error.body.message,
+//                     variant: 'error'
+//                 })
+//             );
+//         }
+//     }
+// }
+
+
+
+
+// Scenario
+
+// User types something, closes the component, opens it again, and the previous value should still be there.
+
+// HTML
+// <template>
+//     <lightning-input
+//         label="Enter Name"
+//         value={name}
+//         onchange={handleChange}>
+//     </lightning-input>
+
+//     <p>Name: {name}</p>
+// </template>
+// JS
+// import { LightningElement } from 'lwc';
+
+// export default class StorePreviousData extends LightningElement {
+//     name = '';
+
+//     connectedCallback() {
+//         const savedName = localStorage.getItem('userName');
+
+//         if (savedName) {
+//             this.name = savedName;
+//         }
+//     }
+
+//     handleChange(event) {
+//         this.name = event.target.value;
+
+//         localStorage.setItem('userName', this.name);
+//     }
+// }
+// How it works
+// Save data
+// localStorage.setItem('userName', this.name);
+
+// Stores:
+
+// Key   : userName
+// Value : Anjali
+// Retrieve data
+// localStorage.getItem('userName');
+
+// Returns:
+
+// Anjali
+// Remove data (optional)
+// localStorage.removeItem('userName');
+// One-line interview answer
+
+// To store previous data in LWC, I use localStorage. I save the value using localStorage.setItem() and retrieve it in connectedCallback() using localStorage.getItem(), so when the component opens again, the previous data is displayed automatically.
 }
 }

@@ -116,6 +116,28 @@
 //         console.log(url);
 //     });
 
+
+
+//  navigateToMyCustomApplication() {
+//         this[NavigationMixin.Navigate]({
+//             type: 'standard__app',
+//             attributes: {
+//                 appTarget: 'c__MyCustomApplication',
+//             }
+//         });
+//     }
+
+
+
+
+// navigateToHome() {
+//     this[NavigationMixin.Navigate]({
+//         type: 'standard__namedPage',
+//         attributes: {
+//             pageName: 'home'
+//         }
+//     });
+// }
 // 👉 Use case:
 
 // hyperlink banana

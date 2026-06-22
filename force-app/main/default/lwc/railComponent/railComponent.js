@@ -8,49 +8,55 @@ import getm6 from "@salesforce/apex/railClass.method6";
 import getm7 from "@salesforce/apex/railClass.method7";
 import getm8 from "@salesforce/apex/railClass.method8";
 import getm9 from "@salesforce/apex/railClass.method9";
-import { refreshApex } from '@salesforce/apex';
+import { refreshApex } from "@salesforce/apex";
 import { NavigationMixin } from "lightning/navigation";
-import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import getRemainingSeats
-from '@salesforce/apex/railClass.getRemainingSeats';
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import getRemainingSeats from "@salesforce/apex/railClass.getRemainingSeats";
 export default class RailComponent extends NavigationMixin(LightningElement) {
-  data0=0;
-  data1=0;
-  data2=0;
-  data3=0;
-  data4=0;
-  data5=0;
-  data6=0;
-  data7=0;
+  data0 = 0;
+  data1 = 0;
+  data2 = 0;
+  data3 = 0;
+  data4 = 0;
+  data5 = 0;
+  data6 = 0;
+  data7 = 0;
   data8;
 
-columns=[
-    {label:'Reservation Number', fieldName:'Name'},
-    {label:'Passenger Name', fieldName:'passName'},
-    {label:'Train Number', fieldName:'trainNo'},
-    {label:'Journey Date', fieldName:'Journey_Date__c', type:'date'},
-    {label:'Status', fieldName:'Status__c'},
-    {label:'Reservation Amount', fieldName:'Amount__c', type:'currency'},
-    {label:'Action',  
-         type: 'button',
+  columns = [
+    { label: "Reservation Number", fieldName: "Name" },
+    { label: "Passenger Name", fieldName: "passName" },
+    { label: "Train Number", fieldName: "trainNo" },
+    { label: "Journey Date", fieldName: "Journey_Date__c", type: "date" },
+    {
+      label: "Status",
+      fieldName: "Status__c",
+      cellAttributes: {
+        class: { fieldName: "statusClass" }
+      }
+    },
+    { label: "Reservation Amount", fieldName: "Amount__c", type: "currency" },
+    {
+      label: "Action",
+      type: "button",
 
-         typeAttributes: {
-             iconName: 'utility:preview',
-             name: 'view_details',
-             label: 'View',
-             variant: 'border-filled'
-         }
-     } ,
-]
+      typeAttributes: {
+        iconName: "utility:preview",
+        name: "view_details",
+        label: "View",
+        variant: "border-filled"
+      }
+    }
+  ];
 
-    a0=[];
-    pagelength=5;
-    currentPage=1;
-    totalPages=0;
-    paginatedData;
-    remainingSeats = 0;
+  a0 = [];
+  pagelength = 5;
+  currentPage = 1;
+  totalPages = 0;
+  paginatedData;
+  remainingSeats = 0;
   @wire(getm1) res1(result) {
-    this.a0=result;
+    this.a0 = result;
     if (result.data) {
       this.data0 = result.data;
       console.log("data", this.data0);
@@ -58,23 +64,23 @@ columns=[
       console.log(result.error);
     }
   }
-handleTrainChange(event){
+  handleTrainChange(event) {
     const trainId = event.detail.value;
-    const idss=trainId[0];
-    console.log('Trainnn',JSON.parse(JSON.stringify(trainId)));
-    getRemainingSeats({trainId: idss })
-        .then(result => {
-            this.remainingSeats = result;
-        })
-        .catch(error => {
-            console.log(error);
-        });
-}
+    const idss = trainId[0];
+    console.log("Trainnn", JSON.parse(JSON.stringify(trainId)));
+    getRemainingSeats({ trainId: idss })
+      .then((result) => {
+        this.remainingSeats = result;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   @wire(getm2) res2({ data, error }) {
     if (data) {
       this.data1 = data;
-      this.totalPages=Math.ceil(this.data1/this.pagelength);
+      this.totalPages = Math.ceil(this.data1 / this.pagelength);
       console.log("data", this.data1);
     } else {
       console.log(error);
@@ -134,26 +140,45 @@ handleTrainChange(event){
       console.log(error);
     }
   }
-  val1='';
-  val2='';
-  handle1(event){
-    this.val1=event.detail.value;
+  val1 = "";
+  val2 = "";
+  handle1(event) {
+    this.val1 = event.detail.value;
   }
 
-  handle2(event){
-    this.val2=event.detail.value;
+  handle2(event) {
+    this.val2 = event.detail.value;
   }
-@track wholeData=[];
-  @wire(getm9,{TrainNo : '$val1', BookingId : '$val2',pagesize: '$pagelength', current: '$currentPage'}) res9(result) {
-    this.wholeData=result;
+  @track wholeData = [];
+  @wire(getm9, {
+    TrainNo: "$val1",
+    BookingId: "$val2",
+    pagesize: "$pagelength",
+    current: "$currentPage"
+  })
+  res9(result) {
+    
+
+    this.wholeData = result;
     if (result.data) {
-      this.paginatedData= result.data.map(rec=>{
-        return{
-            ...rec,
-            passName:rec.Passenger11__c ? rec.Passenger11__r.Name :'',
-            trainNo:rec.Train11__c ? rec.Train11__r.Name: ''
+      this.paginatedData = result.data.map((rec) => {
+        let statusClass = "";
+        if (rec.Status__c === "Confirmed") {
+          statusClass = "slds-text-color_success";
+        } else if (rec.Status__c === "Canceled") {
+          statusClass = "slds-text-color_error";
+        } else if (rec.Status__c === "Pending") {
+          statusClass = "slds-text-color_warning";
+        } else {
+          statusClass = "slds-text-link";
         }
-      })
+        return {
+          ...rec,
+          passName: rec.Passenger11__c ? rec.Passenger11__r.Name : "",
+          trainNo: rec.Train11__c ? rec.Train11__r.Name : "",
+          statusClass: statusClass
+        };
+      });
       console.log("data", this.data8);
     } else {
       console.log(result.error);
@@ -161,54 +186,52 @@ handleTrainChange(event){
   }
 
   async handleRefreshAll() {
-          const refreshPromises = [];
-          if (this.a0) {
-              refreshPromises.push(refreshApex(this.a0));
-          }
-        //   if (this.a1) {
-        //       refreshPromises.push(refreshApex(this.a1));
-        //   }
-        //   if (this.a2) {
-        //       refreshPromises.push(refreshApex(this.a2));
-        //   }
-        //   if (this.a3) {
-        //       refreshPromises.push(refreshApex(this.a3));
-        //   }
-        //   if (this.diffData) {
-        //       refreshPromises.push(refreshApex(this.diffData));
-        //   }
-  
-          try {
-          await Promise.all(refreshPromises);
-          console.log('Refresh complete');
-        } catch (error) {
-          console.error('Error refreshing data', error);
-        }
-      }
-
-      connectedCallback(){
-         const intervalId = setInterval(() => {
-          this.handleRefreshAll();
-        }, 30000);
-      }
-
-      refresh1(){
-        this.handleRefreshAll();
-      }
-
-      refresh2(){
-        return refreshApex(this.wholeData);
-      }
-   isEditModal=false;
-    openModal(){
-      this.isEditModal=true;
+    const refreshPromises = [];
+    if (this.a0) {
+      refreshPromises.push(refreshApex(this.a0));
     }
+    //   if (this.a1) {
+    //       refreshPromises.push(refreshApex(this.a1));
+    //   }
+    //   if (this.a2) {
+    //       refreshPromises.push(refreshApex(this.a2));
+    //   }
+    //   if (this.a3) {
+    //       refreshPromises.push(refreshApex(this.a3));
+    //   }
+    //   if (this.diffData) {
+    //       refreshPromises.push(refreshApex(this.diffData));
+    //   }
 
-    closeModaledit() {
-    this.isEditModal = false;
+    try {
+      await Promise.all(refreshPromises);
+      console.log("Refresh complete");
+    } catch (error) {
+      console.error("Error refreshing data", error);
+    }
   }
 
+  connectedCallback() {
+    const intervalId = setInterval(() => {
+      this.handleRefreshAll();
+    }, 30000);
+  }
 
+  refresh1() {
+    this.handleRefreshAll();
+  }
+
+  refresh2() {
+    return refreshApex(this.wholeData);
+  }
+  isEditModal = false;
+  openModal() {
+    this.isEditModal = true;
+  }
+
+  closeModaledit() {
+    this.isEditModal = false;
+  }
 
   savehandle() {
     this.isEditModal = false;
@@ -232,19 +255,15 @@ handleTrainChange(event){
     });
     this.dispatchEvent(event);
   }
- 
-  handleClick(){
-    
-  }
+
+  handleClick() {}
 
   // handleRowAction(event) {
-       
+
   //       const actionName = event.detail.action.name;
-        
-        
+
   //       const rowId = event.detail.row.Id;
 
-        
   //       switch (actionName) {
   //           case 'view_details':
   //               this[NavigationMixin.Navigate]({
@@ -261,62 +280,96 @@ handleTrainChange(event){
   //       }
   //   }
 
-
-
-
-
-    disconnectedCallback() {
+  disconnectedCallback() {
     clearInterval(this.intervalId);
+  }
+
+  handlePrevious() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  handleNext() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  get isPreviousDisabled() {
+    return this.currentPage === 1;
+  }
+
+  get isNextDisabled() {
+    return this.currentPage === this.totalPages;
+  }
+
+  handleRowAction(event) {
+    const rowId = event.target.dataset.id;
+
+    this[NavigationMixin.Navigate]({
+      type: "standard__recordPage",
+      attributes: {
+        recordId: rowId,
+        objectApiName: "Booking__c",
+        actionName: "view"
+      }
+    });
+  }
 }
 
+// <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+//     <thead>
+//         <tr>
+//             <th>Reservation Number</th>
+//             <th>Passenger Name</th>
+//             <th>Status</th>
+//             <th>Amount</th>
+//         </tr>
+//     </thead>
 
+//     <tbody>
+//         <template for:each={paginatedData} for:item="rec">
+//             <tr key={rec.Id}>
+//                 <td>{rec.Name}</td>
+//                 <td>{rec.passName}</td>
 
+//                 <td>
+//                     <span class={rec.statusClass}>
+//                         {rec.Status__c}
+//                     </span>
+//                 </td>
 
+//                 <td>{rec.Amount__c}</td>
+//             </tr>
+//         </template>
+//     </tbody>
+// </table>
+// CSS
+// .green {
+//     background: green;
+//     color: white;
+//     padding: 4px 10px;
+//     border-radius: 15px;
+// }
 
-    
+// .red {
+//     background: red;
+//     color: white;
+//     padding: 4px 10px;
+//     border-radius: 15px;
+// }
 
-handlePrevious() {
-        if (this.currentPage > 1) {
-            this.currentPage--;
-            
-        }
+// .orange {
+//     background: orange;
+//     color: white;
+//     padding: 4px 10px;
+//     border-radius: 15px;
+// }
 
-    }
-
-    handleNext() {
-        if (this.currentPage < this.totalPages) {
-            this.currentPage++;
-        }
-    }
-
-    get isPreviousDisabled() {
-        return this.currentPage === 1;
-    }
-
-    get isNextDisabled() {
-        return this.currentPage === this.totalPages;
-    }
-
-
-
-
-    handleRowAction(event) {
-
- 
-        const rowId = event.target.dataset.id;
-
-        
-       
-                this[NavigationMixin.Navigate]({
-                            type: 'standard__recordPage',
-                            attributes: {
-                                recordId: rowId,
-                                objectApiName: "Booking__c",
-                                actionName: "view"
-                            }
-                        });
-                
-        }
-    
-}
-
+// .blue {
+//     background: blue;
+//     color: white;
+//     padding: 4px 10px;
+//     border-radius: 15px;
+// }

@@ -114,17 +114,17 @@
         </div>
       </div>
 
-      <!-- <lightning-datatable
+      <lightning-datatable
         data={paginatedData}
         columns={columns}
         key-field="Id"
         onrowaction={handleRowAction}
         hide-checkbox-column
       >
-      </lightning-datatable> -->
+      </lightning-datatable>
 
 
-      <table class="slds-table slds-table_bordered slds-m-top_medium">
+      <!-- <table class="slds-table slds-table_bordered slds-m-top_medium">
          <thead>
              <tr>
                  <th>Reservation Number</th>
@@ -141,8 +141,8 @@
              <template for:each={paginatedData} for:item="rec">
                  <tr key={rec.Id}>
 
-                     <!-- 🔥 NAME -->
-                     <td >
+                    
+                    <td >
                        {rec.Name} 
                      </td>
                      <td >
@@ -158,8 +158,8 @@
                        {rec.Status__c} 
                      </td>
 
-                     <!-- 🔥 STAGE -->
-                     <td>
+                     
+                      <td>
                          
                              {rec.Amount__c}
                         
@@ -178,7 +178,7 @@
                  </tr>
              </template>
          </tbody>
-     </table>
+     </table>  -->
 
        <div class="slds-align_absolute-center slds-m-top_medium">
             <lightning-button label="Previous" onclick={handlePrevious} disabled={isPreviousDisabled}></lightning-button>

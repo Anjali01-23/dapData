@@ -496,3 +496,63 @@
 // Jab aap fieldValue bhejte hain, toh wo String format mein hoti hai. Agar aap Amount (Currency) ya Date field update kar rahe hain, toh aapko Apex mein use Typecast karna pad sakta hai, kyunki record.put ko sahi data type chahiye hota hai.
 
 // Kya aap chahte hain ki main aapko bataun ki Date ya Number fields ke liye is Apex code mein "Type Casting" kaise jodein?
+
+
+//Accordian
+Apex
+public with sharing class AccountController {
+
+    @AuraEnabled(cacheable=true)
+    public static List<Account> getAccountsWithContacts() {
+        return [
+            SELECT Id,
+                   Name,
+                   (SELECT Id, Name, Email FROM Contacts)
+            FROM Account
+            LIMIT 10
+        ];
+    }
+}
+JS
+import { LightningElement, wire } from 'lwc';
+import getAccountsWithContacts
+    from '@salesforce/apex/AccountController.getAccountsWithContacts';
+
+export default class AccountAccordion extends LightningElement {
+
+    accounts = [];
+    error;
+
+    @wire(getAccountsWithContacts)
+    wiredAccounts({ data, error }) {
+        if (data) {
+            this.accounts = data;
+            this.error = undefined;
+        } else if (error) {
+            this.error = error;
+            this.accounts = [];
+        }
+    }
+}
+HTML
+<template>
+    <lightning-accordion allow-multiple-sections-open>
+
+        <template for:each={accounts} for:item="acc">
+
+            <lightning-accordion-section
+                key={acc.Id}
+                name={acc.Id}
+                label={acc.Name}>
+
+                <template if:true={acc.Contacts.length}>
+
+                    <template
+                        for:each={acc.Contacts}
+                        for:item="con">
+
+                        <p key={con.Id}>
+                            {con.Name} - {con.Email}
+                        </p>
+
+                    </template>
